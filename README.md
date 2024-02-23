@@ -14,3 +14,7 @@ I am doing contexts in different platforms like [code4rena](https://code4rena.co
 |-------|-----------|-------|:----:|
 |[ZetaChain](https://code4rena.com/audits/2023-11-zetachain)|L1, OmniChain, Cross-chain|1 H, 10 L| - |
 |[NextGen](https://code4rena.com/audits/2023-10-nextgen)|NFTs, Airdrops|3 H, 1 M|[📄](https://code4rena.com/reports/2023-10-nextgen)|
+
+## OpenSource Projects
+
+- [OpenZeppelin Ethernauts CTF Solutions using Foundry](https://github.com/Al-Qa-qa/ethernaut-solutions-foundry)
