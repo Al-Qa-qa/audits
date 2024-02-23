@@ -6,7 +6,7 @@ NextGen context || NFTs, VRF, Airdrops || 30 Oct 2023 to 13 Nov 2023 on [code4re
 |ID|Title|Severity|
 |--|-----|:------:|
 |[H&#8209;01](#h-01-reentrancy-in-nextgencoremint-can-allow-users-to-mint-tokens-more-than-the-max-allowance)|Reentrancy in `NextGenCore::mint` can allow users to mint tokens more than the max allowance|HIGH|
-|[H-02](##h-02-auctiondemoclaimauction-is-subjected-to-an-out-of-gas-when-executing-because-of-6364-rule)|C4 NextGen finding: `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule|HIGH|
+|[H-02](#h-02-auctiondemoclaimauction-is-subjected-to-an-out-of-gas-when-executing-because-of-63-64-rule)|C4 NextGen finding: `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule|HIGH|
 |[H-03](#h-03-invalid-time-validation-can-lead-make-auction-winners-claiming-the-auction-without-paying)|Invalid time validation can lead make auction winners claiming the auction without paying|HIGH|
 ||||
 |[M&#8209;01](#m-01-minting-before-burning-in-nextgencoreburntomint-leads-to-reentrancy-issues)|Minting Before burning in `NextGenCore::burnToMint` leads to reentrancy issues|MEDIUM
