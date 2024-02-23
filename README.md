@@ -10,10 +10,10 @@ I am doing contexts in different platforms like [code4rena](https://code4rena.co
 
 ## Audit Contexts
 
-|Context|Description|Findins|Report|
-|-------|-----------|-------|:----:|
-|[ZetaChain](https://code4rena.com/audits/2023-11-zetachain)|L1, OmniChain, Cross-chain|1 H, 10 L| - |
-|[NextGen](https://code4rena.com/audits/2023-10-nextgen)|NFTs, Airdrops|3 H, 1 M|[📄](https://code4rena.com/reports/2023-10-nextgen)|
+|Context|Description|Findings|Report|
+|-------|-----------|--------|:----:|
+|[ZetaChain](https://github.com/Al-Qa-qa/audits/blob/main/Contexts/2023-11-zetachain.md)|L1, OmniChain, Cross-chain|1 H, 11 L| - |
+|[NextGen](https://github.com/Al-Qa-qa/audits/blob/main/Contexts/2023-10-nextgen.md)|NFTs, Airdrops|3 H, 1 M|[📄](https://code4rena.com/reports/2023-10-nextgen)|
 
 ## OpenSource Projects
 
