@@ -1,5 +1,5 @@
 # NextGen
-NextGen context- 30 Oct 2023 on code4rena - [Context page](https://code4rena.com/audits/2023-10-nextgen)
+NextGen context | 30 Oct 2023 on code4rena | [Context page](https://code4rena.com/audits/2023-10-nextgen)
 
 ## My Findings Summary
 
