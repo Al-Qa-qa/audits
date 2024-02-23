@@ -60,7 +60,11 @@ tokensAirdropPerAddress[_collectionID][_recipient] = tokensAirdropPerAddress[_co
 
 #### Proof of Concept
 I wrote a smart contract that can make this attack, here is the solidity code for the contract, The file is `attack/ReentrancyMint.sol` in `hardhat/smart-contracts`.
-```solidity
+
+<details>
+  <summary>Contract</summary>
+  
+  ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
@@ -128,9 +132,17 @@ function onERC721Received(address from, address to, uint256 tokenId, bytes memor
 }
 ```
 
+
+</details>
+
+
 Then, I implemented a hardhat test to simulate the problem, you can copy/paste this test after `context("Get Price", ...)` block, in `nextGen.test.js` file.
+
+<details>
+  <summary>Testing js Script</summary>
+
 ```javascript
-context("Test `MinterContract::mint`", () => {
+  context("Test `MinterContract::mint`", () => {
 it("should allow re-entrancy in `NextGenCore::mint`", async () => {
     const [, , , , , , , , , , , , , hacker] = await ethers.getSigners();
 
@@ -176,6 +188,8 @@ it("should allow re-entrancy in `NextGenCore::mint`", async () => {
 });
 });
 ```
+</details>
+
 
 #### Tools Used
 Manual Review + Hardhat
@@ -206,7 +220,6 @@ It is better to change it in the airdrop too.
 tokensAirdropPerAddress[_collectionID][_recipient] = tokensAirdropPerAddress[_collectionID][_recipient] + 1;
 + _mintProcessing(mintIndex, _recipient, _tokenData, _collectionID, _saltfun_o);
 ```
-
 
 ### Assessed type
 
@@ -305,6 +318,11 @@ _**NOTE**:`1/64` and gas problems lie at a medium level in most cases, but the p
 #### Proof Of Concept
 
 I wrote a smart contract that can make this attack, here is the solidity code for the contract, The file is `attack/GasWastageAuctioneer.sol` in `hardhat/smart-contracts`.
+
+<details>
+  <summary>Contract</summary>
+  
+  
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
@@ -335,8 +353,15 @@ contract GasWastageAuctioneer {
   }
 }
 ```
+
+</details>
+
 Then, I implemented a hardhat test to simulate the problem, you can copy/paste this test after `context("Get Price", ...)` block, in `nextGen.test.js` file.
-```javascript
+
+<details>
+  <summary>Testing js script</summary>
+  
+  ```javascript
 context("Test `AuctionDemo::claimAuction`", () => {
   it("It should block the `AuctionDemo::claimAuction` permenantly through `out of gas` error", async () => {
       const [, , , , , , , , , , , , , receipent, bidder1, bidder2, gasWaster] = await ethers.getSigners();
@@ -417,6 +442,10 @@ context("Test `AuctionDemo::claimAuction`", () => {
   });
 });
 ```
+
+
+</details>
+
 This js test script will give the following error `Transaction ran out of gas`, disabling the claiming auction permanently.
 
 _Keep in mind that the javascript script will make two while loops each making 1 billion iterations. The transaction will revert (internally from the blockchain, not the js script itself) before completing these iterations. If your PC has an old processor, you can terminate the process if you find the PC goes hotter._
@@ -544,7 +573,11 @@ Miners can do this attack too, but as we said it is scarcely to happen.
 
 #### Proof of Concept
 I wrote a smart contract that can make this attack, here is the solidity code for the contract, The file is `attack/ClaimWithoutPay.sol` in `hardhat/smart-contracts`.
-```solidity
+
+<details>
+  <summary>Contract</summary>
+  
+  ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
@@ -579,9 +612,16 @@ function onERC721Received(address from, address to, uint256 tokenId, bytes memor
 }
 ```
 
+
+</details>
+
+
 I implemented a hardhat test to simulate the problem, you can copy/paste this test after `context("Get Price", ...)` block, in `nextGen.test.js` file.
 
-```javascript
+<details>
+  <summary>Testing js script</summary>
+  
+  ```javascript
 context("Test `AuctionDemo`", () => {
 it("should allow The winner to claim his prize, and ", async () => {
     const [, , , , , , , , , , , , , receipent, bidder1, bidder2, winner] = await ethers.getSigners();
@@ -701,6 +741,8 @@ it("should allow The winner to claim his prize, and ", async () => {
 });
 });
 ```
+
+</details>
 
 #### Tools Used
 Manual Review + Hardhat
