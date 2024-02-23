@@ -12,8 +12,8 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 
 |Contest|Description|Findings|Report|
 |-------|-----------|--------|:----:|
-|[ZetaChain](https://github.com/Al-Qa-qa/audits/blob/main/Contexts/2023-11-zetachain.md)|L1, OmniChain, Cross-chain|1 H, 11 L| - |
-|[NextGen](https://github.com/Al-Qa-qa/audits/blob/main/Contexts/2023-10-nextgen.md)|NFTs, Airdrops|3 H, 1 M|[📄](https://code4rena.com/reports/2023-10-nextgen)|
+|[ZetaChain](https://github.com/Al-Qa-qa/audits/blob/main/Contests/2023-11-zetachain.md)|L1, OmniChain, Cross-chain|1 H, 11 L| - |
+|[NextGen](https://github.com/Al-Qa-qa/audits/blob/main/Contests/2023-10-nextgen.md)|NFTs, Airdrops|3 H, 1 M|[📄](https://code4rena.com/reports/2023-10-nextgen)|
 
 ## OpenSource Projects
 
