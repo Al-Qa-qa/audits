@@ -1,5 +1,5 @@
 # ZetaChain
-ZetaChain context | 20 Nov 2023 to 18 Dec 2023 on code4rena | [Context page](https://code4rena.com/audits/2023-11-zetachain)
+ZetaChain context || Layer1, Cross Chain, Omnichain || 20 Nov 2023 to 18 Dec 2023 on [code4rena](https://code4rena.com/audits/2023-11-zetachain)
 
 ## My Findings Summary
 
