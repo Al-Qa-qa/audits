@@ -767,6 +767,8 @@ So the person can not cancel the bid at the time of claiming, as they do not ove
 Invalid Validation
 
 ---
+---
+---
 
 ## [M-01] Minting Before burning in `NextGenCore::burnToMint` leads to reentrancy issues
 
