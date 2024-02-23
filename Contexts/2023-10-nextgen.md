@@ -9,7 +9,7 @@ NextGen context | 30 Oct 2023 on code4rena | [Context page](https://code4rena.co
 |[H-02](#h-02-c4-nextgen-finding-auctiondemoclaimauction-is-subjected-to-an-out-of-gas-when-executing-because-of-6364-rule)|C4 NextGen finding: `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule|HIGH|
 |[H-03](#h-03-invalid-time-validation-can-lead-make-auction-winners-claiming-the-auction-without-paying)|Reentrancy in `NextGenCore::mint` can allow users to mint tokens more than the max allowance|HIGH|
 ||||
-|[M&#8209;01](#m-01-minting-before-burning-in-nextgencoreburntomint-leads-to-reentrancy-issues)|Reentrancy in `NextGenCore::mint` can allow users to mint tokens more than the max allowance|MEDIUM
+|[M&#8209;01](#m-01-minting-before-burning-in-nextgencoreburntomint-leads-to-reentrancy-issues)|Minting Before burning in `NextGenCore::burnToMint` leads to reentrancy issues|MEDIUM
 
 ---
 
@@ -227,7 +227,7 @@ Reentrancy
 
 --- 
 
-## [H-02] C4 NextGen finding: `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule
+## [H-02] `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule
 
 ### Lines of code
 
