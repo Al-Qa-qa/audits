@@ -227,7 +227,7 @@ Reentrancy
 
 --- 
 
-## [H-02] `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule
+## [H-02] `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63-64` rule
 
 ### Lines of code
 
