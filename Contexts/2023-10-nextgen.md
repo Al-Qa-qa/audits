@@ -1,5 +1,5 @@
 # NextGen
-NextGen context || NFTs, VRF, Airdrops || 30 Oct 2023 to 13 Nov 2023 on [code4rena](https://code4rena.com/audits/2023-10-nextgen)
+NextGen contest || NFTs, VRF, Airdrops || 30 Oct 2023 to 13 Nov 2023 on [code4rena](https://code4rena.com/audits/2023-10-nextgen)
 
 ## My Findings Summary
 
