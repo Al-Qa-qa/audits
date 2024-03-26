@@ -10,10 +10,12 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 
 ## Audit Contests
 
-|Contest|Description|Findings|Report|
-|-------|-----------|--------|:----:|
-|[ZetaChain](https://github.com/Al-Qa-qa/audits/blob/main/Contests/2023-11-zetachain.md)|L1, OmniChain, Cross-chain|1 H, 11 L| - |
-|[NextGen](https://github.com/Al-Qa-qa/audits/blob/main/Contests/2023-10-nextgen.md)|NFTs, Airdrops|3 H, 1 M|[📄](https://code4rena.com/reports/2023-10-nextgen)|
+|Contest|Description|Findings|Rank|Report|
+|-------|-----------|--------|:--:|:----:|
+|[PoolTogethar](https://code4rena.com/audits/2024-03-pooltogether)|Vaults, ERC4626|1 H, 2 M, 3 L|🥉️| - |
+|[ZetaChain](https://github.com/Al-Qa-qa/audits/blob/main/Contests/2023-11-zetachain.md)|L1, OmniChain, Cross-chain|1 H, 11 L|11th| - |
+|[NextGen](https://github.com/Al-Qa-qa/audits/blob/main/Contests/2023-10-nextgen.md)|NFTs, Airdrops|3 H, 1 M|43th|[📄](https://code4rena.com/reports/2023-10-nextgen)|
+
 
 ## OpenSource Projects
 
