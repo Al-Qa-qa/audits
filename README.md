@@ -1,4 +1,7 @@
 # Al-Qa'qa' Auditing Portfolio
+This is my Audit portfolio collecting the contests I participated it and my engagments in Web3 security.
+
+For private audits check this link.
 
 ## About Al-Qa'qa'
 I am an Independent Web3 security researcher, focusing on Dapps, and DeFi.
