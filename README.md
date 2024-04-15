@@ -16,7 +16,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 |Contest|Description|Findings|Rank|Report|
 |-------|-----------|--------|:--:|:----:|
 |[UniStaker](https://code4rena.com/audits/2024-02-unistaker-infrastructure#top)|Staking, Voting|[5 L](Contests/2024-03-unistaker.md)|🥈| [📄](https://code4rena.com/reports/2024-02-uniswap-foundation) |
-|[PoolTogethar](https://code4rena.com/audits/2024-03-pooltogether)|Vaults, ERC4626|[1 H, 2 M, 3 L](Contests/2024-03-poolTogethar.md)|🥉️|[📄](https://code4rena.com/reports/2024-03-pooltogether)|
+|[PoolTogethar](https://code4rena.com/audits/2024-03-pooltogether)|Vaults, ERC4626|[1 H, 2 M, 3 L](Contests/2024-03-poolTogether.md)|🥉️|[📄](https://code4rena.com/reports/2024-03-pooltogether)|
 |[Covelant](https://audits.sherlock.xyz/contests/127)|Staking, Nodes Block Producers|[1 M](Contests/2024-01-covalent.md)|15th|[📄](https://audits.sherlock.xyz/contests/127/report)|
 |[ZetaChain](https://code4rena.com/audits/2023-11-zetachain#top)|L1, OmniChain, Cross-chain|[1 H, 11 L](Contests/2023-11-zetachain.md)|11th| - |
 |[NextGen](https://code4rena.com/audits/2023-10-nextgen#top)|NFTs, Airdrops|[3 H, 1 M](Contests/2023-10-nextgen.md)|43th|[📄](https://code4rena.com/reports/2023-10-nextgen)|
