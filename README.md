@@ -8,9 +8,9 @@ I am an Independent Web3 security researcher, focusing on Dapps, and DeFi.
 
 I am doing contests on different platforms like [code4rena](https://code4rena.com/) and [sherlock](https://www.sherlock.xyz/).
 
-- Twitter: [@Al_Qa_qa](https://twitter.com/Al_Qa_qa)
-- Discord: [Al_Qa_qa](https://discord.com/channels/al_qa_qa)
-- Twitter: [@Al_Qa_qa](https://t.me/al_qa_qa) 
+- Twitter: &nbsp;&nbsp;&nbsp; [@Al_Qa_qa](https://twitter.com/Al_Qa_qa)
+- Discord: &nbsp;&nbsp; [@Al_Qa_qa](https://discord.com/channels/al_qa_qa)
+- Telegram: [@Al_Qa_qa](https://t.me/al_qa_qa) 
 
 ## Audit Contests
 
