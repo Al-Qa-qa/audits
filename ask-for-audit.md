@@ -55,9 +55,9 @@ The duration is not a constant period for all protocols with the same SLOCs, whe
 |SLOC|Duraiation|
 |:--:|:--------:|
 | SLOC <= 500 | 4 days|
-| 1000 >= SLOC > 500| 8 days|
-| 1500 >= SLOC > 1000| 14 day|
-| 2000 >= SLOC > 1500| 20 days|
+| 1000 >= SLOC > 500| 7 days|
+| 1500 >= SLOC > 1000| 10 day|
+| 2000 >= SLOC > 1500| 14 days|
 
 This duration may seem to be long, but I take into consideration the weekend days, and if the code is complex. And the duration can be less than that for some protocols.
 
