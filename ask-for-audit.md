@@ -46,7 +46,7 @@ The price to audit the protocol depends on two different things
 
 The price ranges between [3, 6] USDC per LOC based on https://github.com/Consensys/solidity-metrics
 
-The number per LOC is changed according to the complexity of the code.
+The price per LOC is changed according to the complexity of the code.
 
 ### Duration:
 
