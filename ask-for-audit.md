@@ -44,7 +44,7 @@ The price to audit the protocol depends on two different things
 1. The number of solidity codes (the more the code the more expensive)
 2. The code complexity (is there an integration with another protocol, heavy math, YUL code, ...)
 
-The price ranges between [3, 6] USDC per LOC based on https://github.com/Consensys/solidity-metrics
+The price ranges between [5, 10] USDC per LOC based on https://github.com/Consensys/solidity-metrics
 
 The price per LOC is changed according to the complexity of the code.
 
@@ -59,7 +59,7 @@ The duration is not a constant period for all protocols with the same SLOCs, whe
 | 1500 >= SLOC > 1000| 10 day|
 | 2000 >= SLOC > 1500| 14 days|
 
-This duration may seem to be long, but I take into consideration the weekend days, and if the code is complex. And the duration can be less than that for some protocols.
+This duration may change from one protocol to another, but it is a good approximation.
 
 ---
 
@@ -127,6 +127,14 @@ If the users are not actually taking there tokens when making a trade, and do no
 - If the user position is known using the Smart Contract storage, and users can not see their tokens value, nor transfer the position, and can only close the position from the Contract, then I can not accept the protocol.
 
 Some protocols are complex, and some protocols can integrate with other protocols that do one of the things we do not accept. So if you find that you are not sure about the protocol type, you can message me, and I will tell you wether I will be able to accept the protocol or not.
+
+### Yield Farming Strategies
+if Yeild Farming protocol depends on Strategies or Vaults that gain profits from one of the protocol types I do not accept, then I do not accept the protocol.
+
+For example, if the protocol interacts with AAVE vault, then I can not accept the audit as AAVE vaults gain profit from lending/borrowing.
+
+### Integrations
+If the protocol integrates with one of the protocol types that I do not accept, then I may not accept the audit, this depends on how it integrates with it.
 
 ## Disclaimer
 
