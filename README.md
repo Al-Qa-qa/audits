@@ -23,7 +23,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 |Contest|Description|Findings|Rank|Report|
 |:------|:----------|:-------|:--:|:----:|
 |[Optimism-Safe](https://cantina.xyz/leaderboard/d47f8096-8858-437d-a9f5-2fe85ac9b95e)|MultiSig, Safe Wallet|[1 M, 1 L](Contests/2024-05-optimism-safe.md)|15th|[📄](https://cantina.xyz/code/d47f8096-8858-437d-a9f5-2fe85ac9b95e/README.md)|
-|[DYAD](https://code4rena.com/audits/2024-04-dyad#top)|Stable Coin|[3 H, 3 M, 6L](Contests/2024-04-dyad.md)|4th|[📄](https://code4rena.com/reports/2024-04-dyad)|
+|[DYAD](https://code4rena.com/audits/2024-04-dyad#top)|Stablecoin|[3 H, 3 M, 6L](Contests/2024-04-dyad.md)|4th|[📄](https://code4rena.com/reports/2024-04-dyad)|
 |[RadicalxChange](https://audits.sherlock.xyz/contests/191)|NFTs, Auction, Diamond Proxy|[1 H, 1 M](Contests/2024-03-radicalxChange.md)|🥈|[📄](https://audits.sherlock.xyz/contests/191/report)|
 |[PoolTogethar](https://code4rena.com/audits/2024-03-pooltogether)|Vaults, ERC4626|[1 H, 2 M, 3 L](Contests/2024-03-poolTogether.md)|🥉️|[📄](https://code4rena.com/reports/2024-03-pooltogether)|
 |[UniStaker](https://code4rena.com/audits/2024-02-unistaker-infrastructure#top)|Staking, Voting|[5 L](Contests/2024-02-unistaker.md)|🥈| [📄](https://code4rena.com/reports/2024-02-uniswap-foundation)|
