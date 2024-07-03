@@ -16,7 +16,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
-|[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV3](https://github.com/DyadStablecoin/contracts/tree/deploy/vaultManagerV3)|Stablecoin|2 H, 3 M, 1 L|[📄](Solo/DYAD-VaultManagerV3-security-review.pdf)|
+|[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV3](https://github.com/DyadStablecoin/contracts/tree/deploy/vaultManagerV3)|Stablecoin|2 H, 3 M, 2 L|[📄](Solo/DYAD-VaultManagerV3-security-review.pdf)|
 
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
