@@ -86,35 +86,7 @@ If you are not sure about your protocol type and interest rate mechanism, and it
 
 ### Leverage Protocols with fees paid to the Lender
 
-In the case of Leverage in Forex/Crypto trading, you can trade with an amount greater than the amount you have.
-
-- for example, if you have 10ETH, and made 10x leverage, you can open a position that worth 100ETH.
-
-If the leverage accures a percent fee relative to the worth of leveraged money, then I can not accept this protocol. Here is an illustration:
-
-- `Protocol I will accept`
-  - Bob has 10ETH.
-  - Bob wants to open a position in ETH/USDC (he made an Up position meaning ETH should go Up for him to win).
-  - 1 ETH worth 3,300 USD.
-  - Bob made a leverage of 10x (made a position worth 100 ETH i.e. 330,000 USD).
-  - Bob's position is liquidatable only if his collateral can not pay the loss.
-  - ETH price goes down instead of going Up and reaches 3,000 USD.
-  - The position is now worth 100 * 3000 = 300,000.
-  - 330,000 - 300,000 =  -30,000, the protocol losses 30,000.
-  - Bob collateral is 10ETH i.e 10 * 3,000 = 30,000.
-  - Then bob position should get liquidated at this point as his collateral can not pay for that loss.
-  - Ofc, there can be fees accumulated that the protocol takes when closing the position, but it should not be a percent of the position value.
-
-- `Protocol I will not accept`
-  - Bob 10ETH.
-  - Bob wants to open a position in ETH/USDC (he made an Up position meaning ETH should go Up for him to win)
-  - 1 ETH worth 3,000 USD
-  - Bob made leverage of 10x (made a position worth 100 ETH i.e. 300,000 USD)
-  - Leverage fees is 0.5%
-  - This means that Bob will be liquidatable if his position faces a loss in his position that can not pay for the loss and fees
-  - i.e 0.5% * 100ETH = 0.5ETH
-  - This means if bob position faces a loss equal to his collateral - fees (10 ETH - 0.5ETH = 9.5ETH), it will be liquidatable.
-  - This type of protocol I do not accept.
+In most cases, if the protocol is dealing leverage I can't audit it. This includes levarage in borrowing/lending and leverage on trading.
 
 ### Perpetual/Options trading
 
@@ -127,6 +99,9 @@ If the users are not actually taking there tokens when making a trade, and do no
 - If the user position is known using the Smart Contract storage, and users can not see their tokens value, nor transfer the position, and can only close the position from the Contract, then I can not accept the protocol.
 
 Some protocols are complex, and some protocols can integrate with other protocols that do one of the things we do not accept. So if you find that you are not sure about the protocol type, you can message me, and I will tell you wether I will be able to accept the protocol or not.
+
+### Trading Protocols with Shorts
+If the protocol is like a trading protocol that implements shorting mechanism trading, we are not accepting it.
 
 ### Yield Farming Strategies
 if Yeild Farming protocol depends on Strategies or Vaults that gain profits from one of the protocol types I do not accept, then I do not accept the protocol.
