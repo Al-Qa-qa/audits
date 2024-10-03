@@ -5,8 +5,21 @@ Ark Bridge contest || NFT Bridge, Starknet || 31 Jul 2024 to 28 Aug 2024 on [Cod
 
 |ID|Title|Severity|
 |--|-----|:------:|
-|[L&#8209;01](#l-01-changing-atomwarden-will-result-in-losing-atomwalletinitialdepositamount-for-created-and-not-deployed-atoms)|Changing `atomWarden` will result in losing `atomWalletInitialDepositAmount` for Created and not Deployed Atoms|LOW|
-|[L-02](#l-02-unchecking-passed-value-in-setatomdepositfractionfortriple-to-feedenominator)|Unchecking passed value in `setAtomDepositFractionForTriple()` to feeDenominator|LOW|
+|[H&#8209;01](#h-01-permanent-l1---l2-dos-because-of-whitelisting-linked-list-logic)|Permanent (L1 -> L2) DoS Because of whitelisting Linked List Logic.|HIGH|
+|[H&#8209;02](#h-02-the-bridging-process-will-revert-if-the-collection-is-matched-on-the-destination-chain-and-not-matched-on-the-source-chain)|The Bridging Process will revert if the Collection is matched on the destination chain and not matched on the source chain|HIGH|
+|[H&#8209;03](#h-03-unable-to-remove-whitelist-collection-because-of-incorrect-linked-list-element-removing-logic)|Unable to remove whitelist collection because of incorrect Linked List element removing logic|HIGH|
+|[H&#8209;04](#h-04-there-is-no-way-to-upgrade-nfts-collections-on-l1-that-is-mapped-to-original-collections-on-l2)|There is no way to upgrade NFTs collections on `L1` that is mapped to Original Collections on `L2`|HIGH|
+|[H&#8209;05](#h-05-l2bridge-is-incompatible-with-erc721-that-returns-felt252-for-strings)|`L2Bridge` is incompatible with ERC721 that returns `felt252` for strings|HIGH|
+||||
+|[M&#8209;01](#m-01-deposites-from-l2-to-l1-will-be-unwithdrawable-from-l1-when-activating-use_withdraw_auto)|Deposites from L2 to L1 will be unwithdrawable from L1 when activating `use_withdraw_auto`|MEDIUM|
+|[M&#8209;02](#m-02-possibility-of-reverting-when-withdrawing-tokens-from-l1-if-the-receiver-is-an-aa-wallet)|Possibility of reverting when withdrawing Tokens from L1, if the receiver is an AA wallet|MEDIUM|
+|[M&#8209;03](#m-03-a-malicious-user-can-bridge-an-nft-on-l2-and-destroy-it-on-l1)|A Malicious user can bridge an NFT on `L2` and destroy it on `L1`|MEDIUM|
+||||
+|[L&#8209;01](#l-01-escrowed-nfts-are-not-burned-when-withdrawing-them-from-l2bridge)|Escrowed NFTs are not burned when withdrawing them from `L2Bridge`|LOW|
+|[L&#8209;02](#l-02-tokenutil_callbaseuri-will-always-fail-because-of-different-reasons)|`Tokenutil::_callBaseUri` will always fail because of different reasons|LOW|
+|[L&#8209;03](#l-03-implementation-contract-left-uninitialized-and-can-be-initialized)|Implementation contract left uninitialized and can be initialized|LOW|
+|[L&#8209;04](#l-04-checking-baseuri-value-will-succeed-even-if-the-returned-string-is-empty)|Checking `baseURI` value will succeed even if the returned string is empty|LOW|
+|[L&#8209;05](#l-05-existed-collections-are-not-whitelisted-when-bridging)|Existed collections are not whitelisted when Bridging|LOW|
 
 ---
 
