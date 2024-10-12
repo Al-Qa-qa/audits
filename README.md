@@ -16,9 +16,10 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
-|[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV3](https://github.com/DyadStablecoin/contracts/tree/deploy/vaultManagerV3)|Stablecoin|2 H, 3 M, 2 L|[📄](Solo/DYAD-VaultManagerV3-security-review.pdf)|
-|[DYAD](https://www.dyadstable.xyz/)|[DyadXP](https://github.com/DyadStablecoin/contracts/tree/feat/momentum)|Staking, Time-Weighted token|2 H, 3 M, 3 L|[📄](Solo/DyadXP-security-review.pdf)|
-|[DYAD](https://www.dyadstable.xyz/)|[weETH Vault](https://github.com/DyadStablecoin/contracts/)|Vault, weETH token|1 M|[📄](Solo/DYAD-weETH-security-review.pdf)|
+|[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV3](https://github.com/DyadStablecoin/contracts/tree/3ddcbcc7616ba6cacef4f381c90bda6b8f2245d4)|Stablecoin|2 H, 3 M, 2 L|[📄](Solo/DYAD-VaultManagerV3-security-review.pdf)|
+|[DYAD](https://www.dyadstable.xyz/)|[DyadXP](https://github.com/DyadStablecoin/contracts/tree/a8245ea3671dfada7bd3845f2862f384a9294066)|Staking, Time-Weighted token|2 H, 3 M, 3 L|[📄](Solo/DyadXP-security-review.pdf)|
+|[DYAD](https://www.dyadstable.xyz/)|[weETH Vault](https://github.com/DyadStablecoin/contracts/tree/c230ef5b2cb6c3b6e60081f32d78b034a7a410cb)|Vault, weETH token|1 M|[📄](Solo/DYAD-weETH-security-review.pdf)|
+|[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV5](https://github.com/DyadStablecoin/contracts/tree/7a7229a83f6e8ffddf2a303a41aa80c70fe44642)|Stablecoin, Hooks|1 H, 1 M, 2 L| [📄](Solo/Dyad-VaultManagerV5-security-review.pdf)|
 
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
