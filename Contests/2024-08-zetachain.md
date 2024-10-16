@@ -13,7 +13,7 @@ ZetaChain contest || Layer1, Cross Chain, Omnichain || 19 Aug 2023 to 04 Sept 20
 |[M-03](#m-03-malicious-users-can-manipulate-revertable-contracts-onrevert-as-a-normal-message-on-evm-chains)|Malicious users can manipulate `Revertable` Contracts `onRevert()` as a normal message on `EVM` chains|MEDIUM|
 |[M-04](#m-04-message-transfereing-with-onrevert-cant-get-recovered)|Message transfereing with `onRevert()` can't get recovered|MEDIUM|
 |[M-05](#m-05-handling-reverting-with-onrevert-support-for-zeta---evm-will-always-revert-if-the-token-is-zetatoken)|Handling Reverting with `onRevert()` support for `Zeta -> EVM` will always revert if the token is ZetaToken|MEDIUM|
-|[M-06](#m-06-a-malicious-user-can-cause-a-dos-zetachain-clients-by-spamming-evm-inbound-calls)|All ZetaToken Transfers from `EVM -> Zeta` can't be recovered.|MEDIUM|
+|[M-06](#m-06-a-malicious-user-can-cause-a-dos-zetachain-clients-by-spamming-evm-inbound-calls)|A malicious user can cause A `DoS` ZetaChain clients by spamming `EVM` inbound calls|MEDIUM|
 
 
 ---
