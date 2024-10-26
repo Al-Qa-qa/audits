@@ -52,3 +52,4 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 ## OpenSource Projects
 
 - [OpenZeppelin Ethernauts CTF Solutions using Foundry](https://github.com/Al-Qa-qa/ethernaut-solutions-foundry)
+- [Web3 Security Tutorial | Bank Challenge](https://github.com/Al-Qa-qa/bank-web3-security-tutorial)
