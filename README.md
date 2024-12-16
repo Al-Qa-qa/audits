@@ -16,8 +16,8 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
-|[DYAD](https://www.dyadstable.xyz/)|[TimeLock](https://github.com/DyadStablecoin/contracts/tree/84f8337d024ebf289e102f352fdb14b5fccc9418)|TimeLock, Staking Rewards|2 M|[📄](Solo/Dyad-LpStaking-security-review.pdf)|
-|[TadaDAO](https://takadao.io/)|[ReferralGateway](https://github.com/TakafulDAO/takasure.sc/tree/986e61d7e25209e675bf86dbf2edbf871c052247)|DAOs, Referral System|3 H, 4 M, 4 L|[📄](Solo/Dyad-LpStaking-security-review.pdf)|
+|[DYAD](https://www.dyadstable.xyz/)|[TimeLock](https://github.com/DyadStablecoin/contracts/tree/84f8337d024ebf289e102f352fdb14b5fccc9418)|TimeLock, Staking Rewards|2 M|[📄](Solo/Dyad-TimeLock-security-review.pdf)|
+|[TakaDAO](https://takadao.io/)|[ReferralGateway](https://github.com/TakafulDAO/takasure.sc/tree/986e61d7e25209e675bf86dbf2edbf871c052247)|DAOs, Referral System|3 H, 4 M, 4 L|[📄](Solo/TakaDAO-referralGateway-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[LpStaking](https://github.com/DyadStablecoin/contracts/tree/b76cf79afdb2c68bc4f432597c593ab9a29a65b4)|Staking, Transit Storage|2 H, 1 M, 3 L|[📄](Solo/Dyad-LpStaking-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[DyadXPv2](https://github.com/DyadStablecoin/contracts/tree/973cb961198890449e0a80b4be4065dccff0abc0)|Staking, UniswapV3 integration|1 H, 1 M, 2 L| [📄](Solo/DyadXPv2-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV5](https://github.com/DyadStablecoin/contracts/tree/7a7229a83f6e8ffddf2a303a41aa80c70fe44642)|Stablecoin, Hooks|1 H, 1 M, 2 L| [📄](Solo/Dyad-VaultManagerV5-security-review.pdf)|
