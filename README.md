@@ -26,6 +26,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
 |:------|:----------|:-------|:--:|:----:|
+|[Swan Protocol]([https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=leaderboard)|NFTs, AI, Statistics|[2 H, 3 M, 1 L](#)|7th| [📄](https://codehawks.cyfrin.io/c/2024-10-swan-dria/results?t=report&lt=contest&sc=reward&sj=reward&page=1)|
 |[Ark Bridge](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=leaderboard)|NFT Bridge, Starknet|[5 H, 3 M, 5 L](Contests/2024-07-atkBridge.md)|🥇| [📄](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=report)|
 |[Intuition](https://app.hats.finance/audit-competitions/intuition-0x538dbadc50cc87b281cd655f1edbc6ebda02a66a/leaderboard)|Account Abstraction, Vaults|[2 L](Contests/2024-06-Intuition.md)|🥇| [📄](https://app.hats.finance/audit-competitions/intuition-0x538dbadc50cc87b281cd655f1edbc6ebda02a66a/submissions)|
 |[UniStaker](https://code4rena.com/audits/2024-02-unistaker-infrastructure#top)|Staking, Voting|[5 L](Contests/2024-02-unistaker.md)|🥈| [📄](https://code4rena.com/reports/2024-02-uniswap-foundation)|
