@@ -33,7 +33,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
 |:------|:----------|:-------|:--:|:----:|
-|[Soon](https://cantina.xyz/competitions/08c2b0b4-8449-4136-82a2-7074ccdfffac/leaderboard)|NFT Bridge, Starknet|[4 H, 10 M, 3 L](Contests/2024-12-soon.md)|🥇| - |
+|[Soon](https://cantina.xyz/competitions/08c2b0b4-8449-4136-82a2-7074ccdfffac/leaderboard)|SVM, layer2, OP Stack|[4 H, 10 M, 3 L](Contests/2024-12-soon.md)|🥇| - |
 |[Ark Bridge](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=leaderboard)|NFT Bridge, Starknet|[5 H, 3 M, 5 L](Contests/2024-07-atkBridge.md)|🥇| [📄](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=report)|
 |[Intuition](https://app.hats.finance/audit-competitions/intuition-0x538dbadc50cc87b281cd655f1edbc6ebda02a66a/leaderboard)|Account Abstraction, Vaults|[2 L](Contests/2024-06-Intuition.md)|🥇| [📄](https://app.hats.finance/audit-competitions/intuition-0x538dbadc50cc87b281cd655f1edbc6ebda02a66a/submissions)|
 |[UniStaker](https://code4rena.com/audits/2024-02-unistaker-infrastructure#top)|Staking, Voting|[5 L](Contests/2024-02-unistaker.md)|🥈| [📄](https://code4rena.com/reports/2024-02-uniswap-foundation)|
@@ -44,7 +44,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 ## Audit Contests
 |Contest|Description|Findings|Rank|Report|
 |:------|:----------|:-------|:--:|:----:|
-|[Soon](https://cantina.xyz/competitions/08c2b0b4-8449-4136-82a2-7074ccdfffac/leaderboard)|NFT Bridge, Starknet|[4 H, 10 M, 3 L](Contests/2024-12-soon.md)|🥇| - |
+|[Soon](https://cantina.xyz/competitions/08c2b0b4-8449-4136-82a2-7074ccdfffac/leaderboard)|SVM, layer2, OP Stack|[4 H, 10 M, 3 L](Contests/2024-12-soon.md)|🥇| - |
 |[Swan Protocol](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=leaderboard)|NFTs, AI, Statistics|[2 H, 3 M, 1 L](/Contests/2024-10-swan.md)|7th| [📄](https://codehawks.cyfrin.io/c/2024-10-swan-dria/results?t=report&lt=contest&sc=reward&sj=reward&page=1)|
 |[Zetachain](https://cantina.xyz/competitions/80a33cf0-ad69-4163-a269-d27756aacb5e/leaderboard)|Layer1, Cross Chain, Omnichain|[2 H, 6 M](Contests/2024-08-zetachain.md)|🥉️| - |
 |[Ark Bridge](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=leaderboard)|NFT Bridge, Starknet|[5 H, 3 M, 5 L](Contests/2024-07-atkBridge.md)|🥇| [📄](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=report)|
