@@ -28,7 +28,7 @@ I am doing contests on different platforms like [code4rena](https://code4rena.co
 
 ## Engagments
 |Company|Protocol|Description|Findings|Report|
-|:------|:-------|:----------|:------:|:-----|
+|:------|:-------|:----------|:------:|:----:|
 |[Cyfrin](https://www.cyfrin.io/)|[MetaMask](https://metamask.io/)|Account Abstraction, Delegations Modules|1 H, 2 M, 5 L|[📄](engagments/2025-03-18-cyfrin-Metamask-DelegationFramework1-v2.0.pdf)|
 
 
