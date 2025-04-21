@@ -6,7 +6,7 @@ For private audits, check this [link](/ask-for-audit.md).
 ## About Al-Qa'qa'
 I am an Independent Web3 security researcher, focusing on Dapps, and DeFi.
 
-I am doing contests on different platforms like [code4rena](https://code4rena.com/) and [sherlock](https://www.sherlock.xyz/).
+I am doing contests on different platforms like [Sherlock](https://www.sherlock.xyz/), and [Cantina](https://cantina.xyz/u/al-qa-qa).
 
 - Twitter: [@Al_Qa_qa](https://twitter.com/Al_Qa_qa)
 - Discord: [@Al_Qa_qa](https://discord.com/channels/al_qa_qa)
