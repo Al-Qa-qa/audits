@@ -16,7 +16,9 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
-|[Venice](https://x.com/askvenice)|Private|ERC20, Staking|3H, 2 M|[📄](Solo/Venice-security-review.pdf)|
+|Undisclosure|Private|Escrow|None| -- |
+|Undisclosure|Private|Escrow|2 M, 1L| -- |
+|[Venice](https://x.com/askvenice)|Private|ERC20, Staking|3 H, 2 M|[📄](Solo/Venice-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[TimeLock](https://github.com/DyadStablecoin/contracts/tree/84f8337d024ebf289e102f352fdb14b5fccc9418)|TimeLock, Staking Rewards|2 M|[📄](Solo/Dyad-TimeLock-security-review.pdf)|
 |[TakaDAO](https://takadao.io/)|[ReferralGateway](https://github.com/TakafulDAO/takasure.sc/tree/986e61d7e25209e675bf86dbf2edbf871c052247)|DAOs, Referral System|3 H, 4 M, 4 L|[📄](Solo/TakaDAO-referralGateway-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[LpStaking](https://github.com/DyadStablecoin/contracts/tree/b76cf79afdb2c68bc4f432597c593ab9a29a65b4)|Staking, Transit Storage|2 H, 1 M, 3 L|[📄](Solo/Dyad-LpStaking-security-review.pdf)|
@@ -48,6 +50,7 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 ## Audit Contests
 |Contest|Description|Findings|Rank|Report|
 |:------|:----------|:-------|:--:|:----:|
+|[Optimism InterOP](https://cantina.xyz/competitions/44b385bf-e51a-4e6c-b3a8-adbbe24d16e1)|Layer2, OP stack|1 L|5th| - |
 |[Farcaster](https://cantina.xyz/competitions/f9326d2b-bb99-45a9-88c5-94c54aa1823a/leaderboard)|EAS, Social Network|5 H, 2 M, 9 L|6th| - |
 |[Soon](https://cantina.xyz/competitions/08c2b0b4-8449-4136-82a2-7074ccdfffac/leaderboard)|SVM, layer2, OP Stack|[4 H, 10 M, 3 L](Contests/2024-12-soon.md)|🥇| - |
 |[Swan Protocol](https://codehawks.cyfrin.io/c/2024-07-ark-project/results?lt=contest&sc=reward&sj=reward&page=1&t=leaderboard)|NFTs, AI, Statistics|[2 H, 3 M, 1 L](/Contests/2024-10-swan.md)|7th| [📄](https://codehawks.cyfrin.io/c/2024-10-swan-dria/results?t=report&lt=contest&sc=reward&sj=reward&page=1)|
