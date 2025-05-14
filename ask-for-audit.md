@@ -65,7 +65,7 @@ This duration may change from one protocol to another, but it is a good approxim
 
 ## Important Things to know
 - The payment is fully delivered after Pre-Audit Phase, in case of aggrement the auditing process will only start afterthe price we agreed on gets delivered.
-- Mitigation process should not exceeds 2 Weeks (After finishing auditing process, mitigation process should take 2 weeks at max). If it takes longer than 2 weeks, A fine of $100 applies for each day of delay.
+- Mitigation process should not exceeds 2 Weeks (After finishing auditing process, mitigation process should take 2 weeks at max). If it takes longer than 2 weeks, A fine is applied.
 - The mitigation process, should fix only the issues found, any new features are not allowed to be added in mitigation review. in case of a new feature to be added, we take `12$` for each line (we calculate the lines including the feature only)
 - Mitigation should not require too much modifications. Most of the issues are mitigated by simply check to be added or something like that. But sometimes there may be an issue in the design itself, which requires changing the overall protocol structure. In case the mitigation is too complex, there is an additional quote for reviewing it. (like a mitigation of an issue that requirs adding `200` SLOC for example).
 
