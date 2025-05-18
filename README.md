@@ -16,6 +16,7 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
+|[Khuga Labs](https://github.com/KhugaLabs)|[khugabash-smartcontract](https://github.com/KhugaLabs/khugabash-smartcontract/tree/afb2c4a8d2cec20c79d477ec3fdc004707f69478)|Gaming, NFTs|2 H, 2 M, 5 L|[📄](Solo/khuga-Labs-security-review.pdf)|
 |Undisclosure|Private|Escrow|None| -- |
 |Undisclosure|Private|Escrow|2 M, 1L| -- |
 |[Venice](https://x.com/askvenice)|Private|ERC20, Staking|3 H, 2 M|[📄](Solo/Venice-security-review.pdf)|
