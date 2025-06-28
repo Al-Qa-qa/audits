@@ -16,6 +16,7 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
+|Undisclosure|Private|Escrow|2L| -- |
 |[Khuga Labs](https://github.com/KhugaLabs)|[khugabash-smartcontract](https://github.com/KhugaLabs/khugabash-smartcontract/tree/afb2c4a8d2cec20c79d477ec3fdc004707f69478)|Gaming, NFTs|2 H, 2 M, 5 L|[📄](Solo/khuga-Labs-security-review.pdf)|
 |Undisclosure|Private|Escrow|None| -- |
 |Undisclosure|Private|Escrow|2 M, 1L| -- |
@@ -34,6 +35,8 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 |Company|Protocol|Description|Findings|Report|
 |:------|:-------|:----------|:-------|:----:|
 |[Cyfrin](https://www.cyfrin.io/)|[MetaMask](https://metamask.io/)|Account Abstraction, Delegations Modules|1 H, 2 M, 5 L|[📄](engagments/2025-03-18-cyfrin-Metamask-DelegationFramework1-v2.0.pdf)|
+|Undisclosure|Undisclosure|Tokenization, time-weight staking, SVM|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|[Securitize](https://x.com/Securitize)|Staking, RWA, SVM|Private| -- |
 
 
 
