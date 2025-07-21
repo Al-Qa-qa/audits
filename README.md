@@ -16,10 +16,10 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
-|Undisclosure|Private|Escrow|2L| -- |
+|[Merit Systems](https://x.com/merit_systems)|[Escrow](https://github.com/Merit-Systems/contracts/tree/86786d6c6728fad690be7e2c7a76640f6ad7d0b8)|Escrow|2L| [📄](Solo/Merit-System-Security-review-round3.pdf) |
 |[Khuga Labs](https://github.com/KhugaLabs)|[khugabash-smartcontract](https://github.com/KhugaLabs/khugabash-smartcontract/tree/afb2c4a8d2cec20c79d477ec3fdc004707f69478)|Gaming, NFTs|2 H, 2 M, 5 L|[📄](Solo/khuga-Labs-security-review.pdf)|
-|Undisclosure|Private|Escrow|None| -- |
-|Undisclosure|Private|Escrow|2 M, 1L| -- |
+|[Merit Systems](https://x.com/merit_systems)|[Escrow](https://github.com/Merit-Systems/contracts/tree/907bff682a5cdd36e4e43386fe99c33aae516048)|Escrow|None| [📄](Solo/Merit-Systems-ledger-security-review-round-2.pdf) |
+|[Merit Systems](https://x.com/merit_systems)|[SplitWithLockup](https://github.com/Merit-Systems/contracts/tree/87407971342432c1cf52cf378bdfa8355f612807)|Escrow|2 M, 1L| [📄](Solo/Merit-Systems-ledger-security-review.pdf) |
 |[Venice](https://x.com/askvenice)|Private|ERC20, Staking|3 H, 2 M|[📄](Solo/Venice-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[TimeLock](https://github.com/DyadStablecoin/contracts/tree/84f8337d024ebf289e102f352fdb14b5fccc9418)|TimeLock, Staking Rewards|2 M|[📄](Solo/Dyad-TimeLock-security-review.pdf)|
 |[TakaDAO](https://takadao.io/)|[ReferralGateway](https://github.com/TakafulDAO/takasure.sc/tree/986e61d7e25209e675bf86dbf2edbf871c052247)|DAOs, Referral System|3 H, 4 M, 4 L|[📄](Solo/TakaDAO-referralGateway-security-review.pdf)|
@@ -37,7 +37,8 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 |[Cyfrin](https://www.cyfrin.io/)|[MetaMask](https://metamask.io/)|Account Abstraction, Delegations Modules|1 H, 2 M, 5 L|[📄](engagments/2025-03-18-cyfrin-Metamask-DelegationFramework1-v2.0.pdf)|
 |Undisclosure|Undisclosure|Tokenization, time-weight staking, SVM|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|[Securitize](https://x.com/Securitize)|Staking, RWA, SVM|Private| -- |
-
+|[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|12 C/H, 2 M, 8 L| [📄](engagments/Etherspot-CAM-Security-Review.pdf) |
+|[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|2 C/H, 2 M, 4 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
 
 
 ## Highlights
