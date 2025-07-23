@@ -36,7 +36,7 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 |:------|:-------|:----------|:-------|:----:|
 |[Cyfrin](https://www.cyfrin.io/)|[MetaMask](https://metamask.io/)|Account Abstraction, Delegations Modules|1 H, 2 M, 5 L|[📄](engagments/2025-03-18-cyfrin-Metamask-DelegationFramework1-v2.0.pdf)|
 |Undisclosure|Undisclosure|Tokenization, time-weight staking, SVM|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|[Securitize](https://x.com/Securitize)|Staking, RWA, SVM|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Staking, RWA, SVM|Private| -- |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|12 C/H, 2 M, 8 L| [📄](engagments/Etherspot-CAM-Security-Review.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|2 C/H, 2 M, 4 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
 
