@@ -35,11 +35,14 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 |Company|Protocol|Description|Findings|Report|
 |:------|:-------|:----------|:-------|:----:|
 |[Cyfrin](https://www.cyfrin.io/)|[MetaMask](https://metamask.io/)|Account Abstraction, Delegations Modules|1 H, 2 M, 5 L|[📄](engagments/2025-03-18-cyfrin-Metamask-DelegationFramework1-v2.0.pdf)|
-|Undisclosure|Undisclosure|Tokenization, time-weight staking, SVM|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Staking, RWA, SVM|Private| -- |
+|Undisclosure|Undisclosure|SVM, Tokenization, time-weight staking|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|SVM, Staking, RWA|Private| -- |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|12 C/H, 2 M, 8 L| [📄](engagments/Etherspot-CAM-Security-Review.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|2 C/H, 2 M, 4 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
-
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Staking, RWA|Private| -- |
+|Undisclosure|Undisclosure|SVM, staking|Private| -- |
+|Undisclosure|Undisclosure|SUI/Move, CLAMM, staking|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Escrow, Cross chain|Private| -- |
 
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
