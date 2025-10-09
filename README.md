@@ -41,8 +41,11 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|2 C/H, 2 M, 4 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Staking, RWA|Private| -- |
 |Undisclosure|Undisclosure|SVM, staking|Private| -- |
+|[Bailsec](https://x.com/bailsecurity)|HyperLedger|Staking, delegations, Vaults| Private | -- |
 |Undisclosure|Undisclosure|SUI/Move, CLAMM, staking|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Escrow, Cross chain|Private| -- |
+|[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, Escrow|4 C/H, 6 M, 8 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Bridge|Private| -- |
 
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
