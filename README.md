@@ -17,7 +17,7 @@ I am doing contests on different platforms like [Sherlock](https://www.sherlock.
 
 |Protocol|Scope|Description|Findings|Report|
 |:-------|:----|:----------|:-------|:----:|
-|[Merit Systems](https://x.com/merit_systems)|x402-fund-contract (Private)|x402, Funding, Escrow|1M| [📄](Solo/Merit-System-Security-review-x402-fund-contract.pdf) |
+|[Merit Systems](https://x.com/merit_systems)|x402-fund-contract|x402, Funding, Escrow|1M| [📄](Solo/Merit-System-Security-review-x402-fund-contract.pdf) |
 |[Merit Systems](https://x.com/merit_systems)|[Escrow](https://github.com/Merit-Systems/contracts/tree/86786d6c6728fad690be7e2c7a76640f6ad7d0b8)|Escrow|3L| [📄](Solo/Merit-System-Security-review-round3.pdf) |
 |[Khuga Labs](https://github.com/KhugaLabs)|[khugabash-smartcontract](https://github.com/KhugaLabs/khugabash-smartcontract/tree/afb2c4a8d2cec20c79d477ec3fdc004707f69478)|Gaming, NFTs|2 H, 2 M, 5 L|[📄](Solo/khuga-Labs-security-review.pdf)|
 |[Merit Systems](https://x.com/merit_systems)|[Escrow](https://github.com/Merit-Systems/contracts/tree/907bff682a5cdd36e4e43386fe99c33aae516048)|Escrow|None| [📄](Solo/Merit-Systems-ledger-security-review-round-2.pdf) |
