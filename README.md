@@ -32,13 +32,13 @@ I am doing contests on different platforms like [Sherlock](https://audits.sherlo
 |[DYAD](https://www.dyadstable.xyz/)|[DyadXP](https://github.com/DyadStablecoin/contracts/tree/a8245ea3671dfada7bd3845f2862f384a9294066)|Staking, Time-Weighted token|2 H, 3 M, 3 L|[📄](Solo/DyadXP-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV3](https://github.com/DyadStablecoin/contracts/tree/3ddcbcc7616ba6cacef4f381c90bda6b8f2245d4)|Stablecoin|2 H, 3 M, 2 L|[📄](Solo/DYAD-VaultManagerV3-security-review.pdf)|
 
-
+engagments/2025-05-23-cyfrin-securitize-solana-vault-v2.0.pdf
 ## Engagments
 |Company|Protocol|Description|Findings|Report|
 |:------|:-------|:----------|:-------|:----:|
 |[Cyfrin](https://www.cyfrin.io/)|[MetaMask](https://metamask.io/)|Account Abstraction, Delegations Modules|1 H, 2 M, 5 L|[📄](engagments/2025-03-18-cyfrin-Metamask-DelegationFramework1-v2.0.pdf)|
 |Undisclosure|Undisclosure|SVM, Tokenization, time-weight staking|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|SVM, Staking, RWA|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|[Securitize](https://x.com/Securitize)|SVM, Staking, RWA|1 H, 1 M, 5 L| [📄](engagments/2025-05-23-cyfrin-securitize-solana-vault-v2.0.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|12 C/H, 2 M, 8 L| [📄](engagments/Etherspot-CAM-Security-Review.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|2 C/H, 2 M, 4 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Staking, RWA|Private| -- |
