@@ -32,7 +32,6 @@ I am doing contests on different platforms like [Sherlock](https://audits.sherlo
 |[DYAD](https://www.dyadstable.xyz/)|[DyadXP](https://github.com/DyadStablecoin/contracts/tree/a8245ea3671dfada7bd3845f2862f384a9294066)|Staking, Time-Weighted token|2 H, 3 M, 3 L|[📄](Solo/DyadXP-security-review.pdf)|
 |[DYAD](https://www.dyadstable.xyz/)|[VaultManagerV3](https://github.com/DyadStablecoin/contracts/tree/3ddcbcc7616ba6cacef4f381c90bda6b8f2245d4)|Stablecoin|2 H, 3 M, 2 L|[📄](Solo/DYAD-VaultManagerV3-security-review.pdf)|
 
-engagments/2025-05-23-cyfrin-securitize-solana-vault-v2.0.pdf
 ## Engagments
 |Company|Protocol|Description|Findings|Report|
 |:------|:-------|:----------|:-------|:----:|
