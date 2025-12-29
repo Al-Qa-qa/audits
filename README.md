@@ -45,9 +45,12 @@ engagments/2025-05-23-cyfrin-securitize-solana-vault-v2.0.pdf
 |Undisclosure|Undisclosure|SVM, staking|Private| -- |
 |[Bailsec](https://x.com/bailsecurity)|HyperLedger|Staking, delegations, Vaults| Private | -- |
 |Undisclosure|Undisclosure|SUI/Move, CLAMM, staking|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Escrow, Cross chain|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Tron, Escrow, Cross chain|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|SVM, Escrow, Cross chain|Private| -- |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, Escrow|4 C/H, 6 M, 8 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Bridge|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Cross Chain, Bridge|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|L2, ZK rollups|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Cross Chain, Bridge|Private| -- |
 
 ## Highlights
 |Contest|Description|Findings|Rank|Report|
