@@ -74,9 +74,9 @@ This duration may change from one protocol to another, but it is a good approxim
 
 ## Protocols I do not accept
 
-### Protocols used for frauding and stealing
+### Protocols used for fraud and stealing
 
-If the protocol will be used to steal users funds, draining wallets, deceive users, then I will not accept to audit this protocol
+If the protocol will be used to steal users' funds, drain wallets, or deceive users, then I will not accept auditing this protocol
 
 ### Gambling and Lottery Protocols
 
@@ -93,9 +93,9 @@ If there is no fees (interest-rate) accumulated by the Lender, then I can accept
 
 If you are not sure about your protocol type and interest rate mechanism, and its integrations. You can message me and I will give you weither I can accept it or not
 
-### Leverage Protocols with fees paid to the Lender
+### Leverage Protocols with fees paid to the Lender (including FlashLoans)
 
-In most cases, if the protocol is dealing leverage I can't audit it. This includes levarage in borrowing/lending and leverage on trading.
+In most cases, if the protocol is dealing leverage, I can't audit it. This includes leverage in borrowing/lending and leverage on trading.
 
 ### Perpetual/Options trading
 
@@ -110,7 +110,10 @@ If the users are not actually taking there tokens when making a trade, and do no
 Some protocols are complex, and some protocols can integrate with other protocols that do one of the things we do not accept. So if you find that you are not sure about the protocol type, you can message me, and I will tell you wether I will be able to accept the protocol or not.
 
 ### Trading Protocols with Shorts
-If the protocol is like a trading protocol that implements shorting mechanism trading, we are not accepting it.
+If the protocol is like a trading protocol that implements a shorting mechanism trading, we are not accepting it.
+
+### Trading Protocols with external Oracles Price Fetch
+If the Trading protocol does not have its own liquidity, which is common, and uses external oracles to fetch prices, then I do not accept the protocol.
 
 ### Yield Farming Strategies
 if Yeild Farming protocol depends on Strategies or Vaults that gain profits from one of the protocol types I do not accept, then I do not accept the protocol.
