@@ -51,6 +51,8 @@ I am doing contests on different platforms like [Sherlock](https://audits.sherlo
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|L2, ZK rollups|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Cross Chain, Bridge|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|[Stake.Link](https://x.com/stakedotlink)|Staking, Vaults Strategies|2 M, 5 L| [📄](engagments/2026-02-04-cyfrin-stakedotlink-espresso-v2.0.pdf) |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Cross chain, Invoice Management|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Account Abstraction, EIP7702|Private| -- |
 
 
 ## Highlights
