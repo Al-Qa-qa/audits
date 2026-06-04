@@ -54,7 +54,7 @@ I am doing contests on different platforms like [Sherlock](https://audits.sherlo
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Cross chain, Invoice Management|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Account Abstraction, EIP7702|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Account Abstraction, SVM|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|[Molecule](https://x.com/Molecule_sci)|Account Abstraction, Token Bound Accounts|Private| [📄](engagments/2026-05-12-cyfrin-molecule-onchainlab-v2.0.pdf) |
+|[Cyfrin](https://www.cyfrin.io/)|[Molecule](https://x.com/Molecule_sci)|Account Abstraction, Token Bound Accounts|3 C/H, 4 M, 11 L| [📄](engagments/2026-05-12-cyfrin-molecule-onchainlab-v2.0.pdf) |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Token Revocation, Permit2 |Private| -- |
 
 ## Highlights
