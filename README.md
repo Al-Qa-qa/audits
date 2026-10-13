@@ -40,12 +40,12 @@ I am doing contests on different platforms like [Sherlock](https://audits.sherlo
 |[Cyfrin](https://www.cyfrin.io/)|[Securitize](https://x.com/Securitize)|SVM, Staking, RWA|1 H, 1 M, 5 L| [📄](engagments/2025-05-23-cyfrin-securitize-solana-vault-v2.0.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|12 C/H, 2 M, 8 L| [📄](engagments/Etherspot-CAM-Security-Review.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, ERC-7579|2 C/H, 2 M, 4 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Staking, RWA|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|[Ondo](https://x.com/Ondo)|Staking, RWA|2 L| [📄](engagements/2025-07-14-cyfrin-ondo-global-markets-v2.0.pdf) |
 |Undisclosure|Undisclosure|SVM, staking|Private| -- |
 |[Bailsec](https://x.com/bailsecurity)|HyperLedger|Staking, delegations, Vaults| Private | -- |
 |Undisclosure|Undisclosure|SUI/Move, CLAMM, staking|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Tron, Escrow, Cross chain|Private| -- |
-|[Cyfrin](https://www.cyfrin.io/)|Undisclosure|SVM, Escrow, Cross chain|Private| -- |
+|[Cyfrin](https://www.cyfrin.io/)|Atum|Tron, Escrow, Cross chain|1 C, 2 L| [📄](engagements/2025-08-27-cyfrin-atum-tron-contracts-v2.1.pdf) |
+|[Cyfrin](https://www.cyfrin.io/)|Atum|SVM, Escrow, Cross chain|1 C, 2 M, 2 L| [📄](engagements/2025-08-29-cyfrin-atum-solana-v2.0.pdf) |
 |[Sheildify](https://www.shieldify.org/)|[Etherspot](https://x.com/etherspot)|Account Abstraction, Escrow|4 C/H, 6 M, 8 L| [📄](engagments/Etherspot-CAM-Migration-Security-Review.pdf) |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|Cross Chain, Bridge|Private| -- |
 |[Cyfrin](https://www.cyfrin.io/)|Undisclosure|L2, ZK rollups|Private| -- |
